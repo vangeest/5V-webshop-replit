@@ -2,12 +2,8 @@
 image: gitpod/workspace-postgres
 # Command to start on workspace startup (optional)
 tasks:
-  - init: psql < sql/bootstrap_db.sql
-  - init: psql --username=api  shop < sql/create_tables.sql
-  - init: psql --username=api  shop < sql/seed.sql
-
-# command: yarn build
-# Ports to expose on workspace startup (optional)
-#ports:
-#  - port: 8000
-#    onOpen: open-preview
+  - init: |
+      psql < sql/bootstrap_db.sql
+      psql --username=api  shop < sql/create_tables.sql
+      psql --username=api  shop < sql/seed.sql
+  - command: cd src && node index.js
