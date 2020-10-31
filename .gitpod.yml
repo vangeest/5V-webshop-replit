@@ -6,4 +6,4 @@ tasks:
       psql < sql/bootstrap_db.sql
       psql --username=api  shop < sql/create_tables.sql
       psql --username=api  shop < sql/seed.sql
-  - command: cd src && node index.js
+  - command: cd src && yarn install && node index.js 
