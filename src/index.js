@@ -12,18 +12,20 @@ app.use(
 )
 
 app.get('/', (request, response) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
+  response.redirect('index.html');
 })
 
-app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
+app.get('/api/users', db.getUsers)
+app.get('/api/users/:id', db.getUserById)
+app.post('/api/users', db.createUser)
+app.put('/api/users/:id', db.updateUser)
+app.delete('/api/users/:id', db.deleteUser)
+
+// serve static files
+app.use(express.static('../public'))
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
 
-// serve static files
-app.use(express.static('public'))
+
