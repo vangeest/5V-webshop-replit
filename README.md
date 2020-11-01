@@ -9,7 +9,7 @@ https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-
 https://docker-curriculum.com
 * serving static files with jsexpress
 https://expressjs.com/en/starter/static-files.html
-* basic html & css * javascript reference
+* basic html & css & javascript reference
 https://www.w3schools.com
 
 ## TODO
