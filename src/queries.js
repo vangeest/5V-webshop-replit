@@ -1,11 +1,23 @@
 const Pool = require('pg').Pool
-const pool = new Pool({
+
+// development credential
+let connectionString = {
   user: 'api',
-  host: 'localhost',
   database: 'shop',
   password: 'apipass',
-  port: 5432,
-})
+  host: 'localhost',
+  port: 5432
+};
+
+if(process.env.DATABASE_URL !== undefined) {
+  connectionString = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
+  };
+} 
+
+const pool = new Pool(connectionString);
+pool.on('connect', () => console.log('connected to db'));
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
