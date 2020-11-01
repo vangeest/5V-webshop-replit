@@ -7,6 +7,10 @@
 https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
 * introdution to docker\
 https://docker-curriculum.com
+* gitpod online editor en hosting ontwikkelomgeving\
+https://www.gitpod.io/docs/
+* heroku hosting productieomgeving\
+?
 * serving static files with jsexpress\
 https://expressjs.com/en/starter/static-files.html
 * basic html & css & javascript reference\
