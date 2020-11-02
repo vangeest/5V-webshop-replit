@@ -19,9 +19,9 @@ https://www.w3schools.com
 
 # Je shop op Heroku draaien
 
-### Setup (alleen de 1e keer)
+## Setup (alleen de 1e keer)
 
-## login op Heruko
+### login op Heruko
 
 ```
 heroku login -i
@@ -29,7 +29,7 @@ heroku login -i
 
 (note: heroku login werkt niet op gitpod) 
 
-## Maak Heroku app
+### Maak Heroku app
 
 ```
 heroku create
@@ -37,21 +37,21 @@ heroku create
 
 onthoudt de naam van je app (bv `young-plains-71844`)
 
-## Maak een database
+### Maak een database
 
 ```
 heroku addons:create heroku-postgresql:hobby-dev
 ```
 
-## Kopieer je database naar Heroku
+### Kopieer je database naar Heroku
 
-note: de standaard manier werkt niet in gitpod:
+note: de standaard manier werkt helaas niet in gitpod:
 
 ```
 heroku pg:push shop DATABASE_URL --app young-plains-71844
 ```
+zie: https://stackoverflow.com/a/63762256/430721
 
-### Dump je database
 
 Hiermee maak je een dump naar je eigen webserver 
 let op! dit kan aleen met niet gevoelige data
@@ -74,51 +74,25 @@ status kun je checken met
 heroku pg:backups  -a <app-name>
 ```
 
+### Push de code naar heroku
 
+```
+git push heroku
+```
+ of gebruik de gitpiod editor
 
+### Zet aantal heroku workers naar 1
 
-https://3000-d0a5c694-94a9-483a-978f-1d1b086b2c5d.ws-eu01.gitpod.io/shop.dump
-
-
-
+```
 heroku ps:scale web=1
+```
 
-young-plains-71844
+## Link bestaande app aan Heroku
+(na opnieuw opstarten gitpod)
 
-heroku git:remote -a young-plains-71844
-
-
-
-postgresql-solid-63959
-
-heroku pg:push <localdbname> DATABASE_URL --app <appname>
-
-
-Does not work in gitpod:
-
-
-
-https://stackoverflow.com/a/63762256/430721
-
-heroku pg:push shop DATABASE_URL --app young-plains-71844
-
-
-pg_dump -Fc --no-acl --no-owner -h localhost -U api shop > publiv/shop.dump
-heroku pg:backups:restore https://3000-d0a5c694-94a9-483a-978f-1d1b086b2c5d.ws-eu01.gitpod.io/shop.dump DATABASE_URL -a young-plains-71844 --confirm young-plains-71844
-
-
-
-
-
-
-https://3000-d0a5c694-94a9-483a-978f-1d1b086b2c5d.ws-eu01.gitpod.io/shop.dump
-
-heroku pg:backups:restore https://3000-d0a5c694-94a9-483a-978f-1d1b086b2c5d.ws-eu01.gitpod.io/shop.dump DATABASE_URL -a young-plains-71844
-
-
-heroku pg:backups:restore https://3000-d0a5c694-94a9-483a-978f-1d1b086b2c5d.ws-eu01.gitpod.io/shop.dump DATABASE_URL -a young-plains-71844 --confirm young-plains-71844
-
-
+```
+heroku git:remote -a <app-name>
+```
 
 
 ## TODO
