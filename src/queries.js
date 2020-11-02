@@ -11,8 +11,7 @@ let connectionString = {
 
 if(process.env.DATABASE_URL !== undefined) {
   connectionString = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: true
+    connectionString: process.env.DATABASE_URL
   };
 } 
 
