@@ -11,7 +11,10 @@ let connectionString = {
 
 if(process.env.DATABASE_URL !== undefined) {
   connectionString = {
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
   };
 } 
 
