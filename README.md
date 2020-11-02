@@ -98,8 +98,9 @@ heroku git:remote -a <app-name>
 
 ## TODO
 
-- [ ] deploy to heroku
-- [ ] serve static files
+- [X] deploy to heroku
+- [X] serve static files
 - [ ] add some rest calls
 - [ ] more complex model
 - [ ] documentation for students
+- [ ] automate heroko deploy
