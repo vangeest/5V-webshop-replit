@@ -63,7 +63,7 @@ pg_dump -Fc --no-acl --no-owner -h localhost -U api shop > public/shop.dump
 `<link>` is de link naar je eigen website:
 
 ```
-heroku pg:backups:restore https://`<link>`.gitpod.io/shop.dump DATABASE_URL -a <app-name> --confirm <app-name>
+heroku pg:backups:restore https://<link>.gitpod.io/shop.dump DATABASE_URL -a <app-name> --confirm <app-name>
 ```
 
 note: dit kan wel 5 minuten duren (geen idee waarom)
@@ -79,7 +79,8 @@ heroku pg:backups  -a <app-name>
 ```
 git push heroku
 ```
- of gebruik de gitpiod editor
+
+ of gebruik de gitpiod editor (source control> ... > push to > heroku)
 
 ### Zet aantal heroku workers naar 1
 
