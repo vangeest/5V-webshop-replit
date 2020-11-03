@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
 const port = process.env.PORT || 3000;
+const mailer = require('./mailer')
 
 app.use(bodyParser.json())
 app.use(
@@ -23,6 +24,8 @@ app.delete('/api/users/:id', db.deleteUser)
 
 // serve static files
 app.use(express.static('../public'))
+
+mailer.sendMail('Hey', 'You')
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
