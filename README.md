@@ -92,6 +92,12 @@ heroku ps:scale web=1
 (na opnieuw opstarten gitpod)
 
 ```
+heroku login -i
+```
+
+(note: heroku login werkt niet op gitpod) 
+
+```
 heroku git:remote -a <app-name>
 ```
 
@@ -103,4 +109,4 @@ heroku git:remote -a <app-name>
 - [ ] add some rest calls
 - [ ] more complex model
 - [ ] documentation for students
-- [ ] automate heroko deploy
+- [ ] automate/optimize heroko deploy
