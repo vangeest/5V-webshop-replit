@@ -115,7 +115,10 @@ curl --location --request POST 'https://<workspace>.gitpod.io/api/checkout' \
 --data-urlencode 'articles=2' \
 --data-urlencode 'articles=3'
 ```
+### posting data 
 
+onze backend code kan alleen 'x-www-form-urlencoded' aan, voor 'multipart/form-data' default Form-data format moeten we de 'formidable' lib gebruiken 
+(https://www.npmjs.com/package/formidable)
 
 ## TODO
 

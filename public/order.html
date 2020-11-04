@@ -1,6 +1,37 @@
 <html>
   </head>
     <!-- add css link-->
+        <script>
+
+    function urlencodeFormData(fd){
+      var params = new URLSearchParams();
+      for(var pair of fd.entries()){
+          typeof pair[1]=='string' && params.append(pair[0], pair[1]);
+      }
+      return params.toString();
+    }
+
+    function checkout() {
+      var formData = new FormData();
+      formData.append('firstName', 'Bill');
+      formData.append('lastName', 'Gates');
+      formData.append('email', 'bill@microsoft.com');
+      formData.append('articles', 1);
+      formData.append('articles', 2);
+      formData.append('articles', 3);
+      formData.append('articles', 4);
+      formData.append('articles', 5);
+
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/checkout');
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onload = function () {
+        document.getElementById('resp').textContent += this.responseText
+      };
+      xhr.send(urlencodeFormData(formData))
+    }
+    </script>
   </head>
   <body>
     <nav>
@@ -19,6 +50,8 @@
       <!--sent a mail with all the info, maybe put it in the database as well-->
       <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie.<p>
       <p>Zodra je betaald hebt, stuur ik de spullen op.</p>
+      <button onclick="checkout()">Bestellen</button>
+      <p id="resp"></p>
     </main>
     <footer>
       <hr>
