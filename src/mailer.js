@@ -8,6 +8,12 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+function mailConfigOK() {
+    return process.env.GMAIL_EMAIL !== undefined && 
+      process.env.GMAIL_PASSWORD !== undefined &&
+      process.env.EMAIL_FROM !== undefined 
+}
+
 function sendMail(subject, body) {
   console.log('sending mail');
   var mailOptions = {
@@ -18,6 +24,11 @@ function sendMail(subject, body) {
   };
   console.log(process.env.GMAIL_PASSWORD)
 
+  if(!mailConfigOK()) {
+    console.log('mail not configured properly - dumping mail')
+    console.log(JSON.stringify(mailOptions))
+    return
+  } 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
@@ -25,6 +36,7 @@ function sendMail(subject, body) {
       console.log('Email sent: ' + info.response);
     }
   });
+  
 } 
 
 module.exports = {
