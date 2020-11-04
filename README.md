@@ -48,7 +48,7 @@ heroku addons:create heroku-postgresql:hobby-dev
 note: de standaard manier werkt helaas niet in gitpod:
 
 ```
-heroku pg:push shop DATABASE_URL --app young-plains-71844
+heroku pg:push shop DATABASE_URL --app <app-name>
 ```
 zie: https://stackoverflow.com/a/63762256/430721
 

@@ -12,7 +12,7 @@ app.use(
   })
 )
 
-app.get('/', (request, response) => {
+app.get('/', (_request, response) => {
   response.redirect('index.html');
 })
 

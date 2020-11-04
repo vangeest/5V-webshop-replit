@@ -22,7 +22,7 @@ if(process.env.DATABASE_URL !== undefined) {
 const pool = new Pool(connectionString);
 pool.on('connect', () => console.log('connected to db'));
 
-const getUsers = (request, response) => {
+const getUsers = (_request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
@@ -45,7 +45,7 @@ const getUserById = (request, response) => {
 const createUser = (request, response) => {
   const { name, email } = request.body
 
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, _results) => {
     if (error) {
       throw error
     }
@@ -60,7 +60,7 @@ const updateUser = (request, response) => {
   pool.query(
     'UPDATE users SET name = $1, email = $2 WHERE id = $3',
     [name, email, id],
-    (error, results) => {
+    (error, _results) => {
       if (error) {
         throw error
       }
@@ -72,7 +72,7 @@ const updateUser = (request, response) => {
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM users WHERE id = $1', [id], (error, _results) => {
     if (error) {
       throw error
     }
