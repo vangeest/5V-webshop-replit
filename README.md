@@ -101,6 +101,21 @@ heroku login -i
 heroku git:remote -a <app-name>
 ```
 
+## Notes
+
+### Testing checkout
+
+```
+curl --location --request POST 'https://<workspace>.gitpod.io/api/checkout' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'firstName=Robert' \
+--data-urlencode 'lastName=Bakker' \
+--data-urlencode 'email=robert@bakkerfamily.net' \
+--data-urlencode 'articles=1' \
+--data-urlencode 'articles=2' \
+--data-urlencode 'articles=3'
+```
+
 
 ## TODO
 

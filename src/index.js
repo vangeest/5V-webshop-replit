@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
 const port = process.env.PORT || 3000;
-const mailer = require('./mailer')
+const checkout = require('./checkout.js')
 
 app.use(bodyParser.json())
 app.use(
@@ -21,11 +21,10 @@ app.get('/api/users/:id', db.getUserById)
 app.post('/api/users', db.createUser)
 app.put('/api/users/:id', db.updateUser)
 app.delete('/api/users/:id', db.deleteUser)
+app.post('/api/checkout', checkout.checkoutOrder)
 
 // serve static files
 app.use(express.static('../public'))
-
-mailer.sendMail('Hey', 'You')
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
