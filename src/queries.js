@@ -6,7 +6,8 @@ let connectionString = {
   database: 'shop',
   password: 'apipass',
   host: 'localhost',
-  port: 5432
+  port: 5432,
+  ssl: false
 };
 
 if(process.env.DATABASE_URL !== undefined) {
