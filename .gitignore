@@ -1,1 +1,3 @@
 node_modules
+scripts/srv/pid
+scripts/srv/data/shop.dump

@@ -4,6 +4,9 @@
   "description": "RESTful API with Node.js, Express, and PostgreSQL",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "push:db": "cd scripts &&  ./pushdatabase.sh"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "nodemailer": "^6.4.14",

@@ -45,33 +45,10 @@ heroku addons:create heroku-postgresql:hobby-dev
 
 ### Kopieer je database naar Heroku
 
-note: de standaard manier werkt helaas niet in gitpod:
+vanaf de project root (/workspace/<project-name>)
 
 ```
-heroku pg:push shop DATABASE_URL --app <app-name>
-```
-zie: https://stackoverflow.com/a/63762256/430721
-
-
-Hiermee maak je een dump naar je eigen webserver 
-let op! dit kan aleen met niet gevoelige data
-
-```
-pg_dump -Fc --no-acl --no-owner -h localhost -U api shop > public/shop.dump
-```
-
-`<link>` is de link naar je eigen website:
-
-```
-heroku pg:backups:restore https://<link>.gitpod.io/shop.dump DATABASE_URL -a <app-name> --confirm <app-name>
-```
-
-note: dit kan wel 5 minuten duren (geen idee waarom)
-
-status kun je checken met
-
-```
-heroku pg:backups  -a <app-name>
+ yarn push:db <app-name>
 ```
 
 ### Push de code naar heroku
