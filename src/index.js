@@ -16,11 +16,12 @@ app.get('/', (_request, response) => {
   response.redirect('index.html');
 })
 
-app.get('/api/users', db.getUsers)
-app.get('/api/users/:id', db.getUserById)
-app.post('/api/users', db.createUser)
-app.put('/api/users/:id', db.updateUser)
-app.delete('/api/users/:id', db.deleteUser)
+app.get('/api/products', db.getProducts)
+app.get('/api/products/:id', db.getProductById)
+// our API is not protected...so let's not expose these
+// app.post('/api/products', db.createProduct)
+// app.put('/api/products/:id', db.updateProduct)
+// app.delete('/api/products/:id', db.deleteProduct)
 app.post('/api/checkout', checkout.checkoutOrder)
 
 // serve static files

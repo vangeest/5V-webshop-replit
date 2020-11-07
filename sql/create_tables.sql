@@ -1,6 +1,8 @@
-DROP TABLE IF EXISTS users; 
-CREATE TABLE users (
+DROP TABLE IF EXISTS products; 
+CREATE TABLE products (
   ID SERIAL PRIMARY KEY,
-  name VARCHAR(30),
-  email VARCHAR(30)
+  code VARCHAR(15),
+  name VARCHAR(255),
+  description TEXT,
+  price NUMERIC(10, 2)
 );
