@@ -21,13 +21,24 @@
       <hr>
       <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
     </footer>
+    <!-- template for product info-->
+    <template id="productcard">
+      <div class="card">
+        <h1 class="card_title"></h1>
+        <p class="card_description"></p>
+        <img class="card_image">
+        <div class="card_price">€</div>
+        <div class="card_code"></div>
+      </div>
+    </template> 
     <script>
       (function() {
         // your page initialization code here
         // the DOM will be available here
 
+        const template = document.querySelector('#productcard');
+
         const app = document.getElementById('index')
-        console.log(app)
 
         const container = document.createElement('div')
         container.setAttribute('class', 'container')
@@ -37,34 +48,26 @@
         var request = new XMLHttpRequest()
         request.open('GET', '/api/products', true)
         request.onload = function () {
-            // Begin accessing JSON data here
             var data = JSON.parse(this.response)
             if (request.status >= 200 && request.status < 400) {
               data.forEach((product) => {
-                const card = document.createElement('div')
-                card.setAttribute('class', 'card')
 
-                const h1 = document.createElement('h1')
-                h1.textContent = product.name
+                const clone = template.content.cloneNode(true);
+                clone.querySelector(".card_title").textContent = product.name
+                clone.querySelector(".card_description").textContent =`${product.description}...`
+                clone.querySelector(".card_price").textContent += product.price
+                clone.querySelector(".card_code").textContent = product.code
+                clone.querySelector(".card_image").src =`/images/${product.id}.jpg`
 
-                const p = document.createElement('p')
-                product.description = product.description.substring(0, 300)
-                p.textContent = `${product.description}...`
-                const priceTag = document.createElement('price')
-                priceTag.textContent = '€' + product.price
+                container.appendChild(clone)
 
-                container.appendChild(card)
-                card.appendChild(h1)
-                card.appendChild(p)
-                card.appendChild(priceTag)
-              })
+                })
             } else {
               const errorMessage = document.createElement('marquee')
               errorMessage.textContent = `Gah, it's not working!`
               app.appendChild(errorMessage)
             }
           }
-
           request.send()
 
       })();

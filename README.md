@@ -97,6 +97,19 @@ curl --location --request POST 'https://<workspace>.gitpod.io/api/checkout' \
 onze backend code kan alleen 'x-www-form-urlencoded' aan, voor 'multipart/form-data' default Form-data format moeten we de 'formidable' lib gebruiken 
 (https://www.npmjs.com/package/formidable)
 
+
+### Random images maken
+
+```
+count=1
+while [[ $count -lt 100 ]]
+do
+ echo $count
+ count=$[$count+1]
+ wget -O $count.jpg https://picsum.photos/200/300
+done
+```
+
 ## TODO
 
 - [X] deploy to heroku
