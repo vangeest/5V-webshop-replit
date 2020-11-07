@@ -10,7 +10,7 @@
         <li><a href="order.html">Kassa</a></li>
       </ul>
     </nav>
-    <main>
+    <main id="index">
       <h1>Artikelen</h1>
       <p>Hier zie je een lijst met artikelen die je bij mij kunt bestellen.</p>
       <p>klik op een artikel voor meer informatie<p>
@@ -21,5 +21,53 @@
       <hr>
       <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
     </footer>
+    <script>
+      (function() {
+        // your page initialization code here
+        // the DOM will be available here
+
+        const app = document.getElementById('index')
+        console.log(app)
+
+        const container = document.createElement('div')
+        container.setAttribute('class', 'container')
+
+        app.appendChild(container)
+
+        var request = new XMLHttpRequest()
+        request.open('GET', '/api/products', true)
+        request.onload = function () {
+            // Begin accessing JSON data here
+            var data = JSON.parse(this.response)
+            if (request.status >= 200 && request.status < 400) {
+              data.forEach((product) => {
+                const card = document.createElement('div')
+                card.setAttribute('class', 'card')
+
+                const h1 = document.createElement('h1')
+                h1.textContent = product.name
+
+                const p = document.createElement('p')
+                product.description = product.description.substring(0, 300)
+                p.textContent = `${product.description}...`
+                const priceTag = document.createElement('price')
+                priceTag.textContent = '€' + product.price
+
+                container.appendChild(card)
+                card.appendChild(h1)
+                card.appendChild(p)
+                card.appendChild(priceTag)
+              })
+            } else {
+              const errorMessage = document.createElement('marquee')
+              errorMessage.textContent = `Gah, it's not working!`
+              app.appendChild(errorMessage)
+            }
+          }
+
+          request.send()
+
+      })();
+    </script>
   </body>
 </html>
