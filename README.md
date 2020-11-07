@@ -27,7 +27,7 @@ https://www.w3schools.com
 heroku login -i
 ```
 
-(note: heroku login werkt niet op gitpod) 
+(note: `heroku login` werkt niet op gitpod) 
 
 ### Maak Heroku app
 
