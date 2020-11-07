@@ -66,7 +66,7 @@ heroku ps:scale web=1
 ```
 
 ## Link bestaande app aan Heroku
-(na opnieuw opstarten gitpod)
+Deze commando's run je iedere keer nadat je gitpod opnieuw opstart.
 
 ```
 heroku login -i
