@@ -1,6 +1,13 @@
 <html>
   </head>
     <!-- add css link-->
+    <script>
+      function addToBasket(id, amount) {
+        var basket = JSON.parse(localStorage.getItem('basket')||'{}')
+        basket[id] = amount
+        localStorage.setItem('basket', JSON.stringify(basket))
+      }
+    </script>
   </head>
   <body>
     <nav>
@@ -15,7 +22,6 @@
       <p>Hier zie je een lijst met artikelen die je bij mij kunt bestellen.</p>
       <p>klik op een artikel voor meer informatie<p>
       <p>klik op de "plus" om het artikel in je winkelwagen te stoppen</p>
-      <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
     </main>
     <footer>
       <hr>
@@ -29,6 +35,8 @@
         <img class="card_image">
         <div class="card_price">€</div>
         <div class="card_code"></div>
+        <input type="number" value="1">
+        <button onClick="addToBasket(1,10)">+</button>
       </div>
     </template> 
     <script>
@@ -69,6 +77,24 @@
             }
           }
           request.send()
+
+          // make sure we can listen to storage chnanges on the same page
+          // https://stackoverflow.com/a/43634169/430721
+          var originalSetItem = localStorage.setItem;
+          localStorage.setItem = function(key, value) {
+            var event = new Event('itemInserted');
+
+            event.value = value; // Optional..
+            event.key = key; // Optional..
+
+            document.dispatchEvent(event);
+
+            originalSetItem.apply(this, arguments);
+          };
+          var localStorageSetHandler = function(e) {
+            console.log('localStorage.set("' + e.key + '", "' + e.value + '") was called');
+          };
+          document.addEventListener("itemInserted", localStorageSetHandler, false);
 
       })();
     </script>
