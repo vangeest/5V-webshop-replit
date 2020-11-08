@@ -2,11 +2,59 @@
   </head>
     <!-- add css link-->
     <script>
+      function addClosestToBasket(el){
+        var parent = el.parentNode
+        var amount = parseInt(parent.querySelector('.card_amount').value)
+        var id = parent.querySelector('.card_id').value
+        addToBasket(id, amount)
+      }
+
+      function readBasket() {
+        return JSON.parse(localStorage.getItem('basket')||'{}')
+      }
+
       function addToBasket(id, amount) {
-        var basket = JSON.parse(localStorage.getItem('basket')||'{}')
-        basket[id] = amount
+        var basket = readBasket()
+        basket[id] = amount + (basket[id]||0)
         localStorage.setItem('basket', JSON.stringify(basket))
       }
+
+      // make sure we can listen to storage chnanges on the same page
+      // https://stackoverflow.com/a/43634169/430721
+      var originalSetItem = localStorage.setItem;
+      localStorage.setItem = function(key, value) {
+        var event = new Event('itemInserted');
+
+        event.value = value; // Optional..
+        event.key = key; // Optional..
+
+        document.dispatchEvent(event);
+
+        originalSetItem.apply(this, arguments);
+      };
+
+      function updateBasket(value){
+        const basket = value||readBasket()
+        var num = 0;
+        for (let key in basket) {
+          num += parseInt(basket[key])
+        }
+        if( num == 0){
+          window.basket_num.textContent = "(leeg)"
+        } else if( num == 1) {
+          window.basket_num.textContent = `${num} item`
+        } else {
+          window,basket_num.textContent = `${num} items`
+        }
+      }
+
+      var localStorageSetHandler = function(e) {
+        if(e.key === "basket") {
+          updateBasket(JSON.parse(e.value))
+       }
+      };
+      document.addEventListener("itemInserted", localStorageSetHandler, false);
+
     </script>
   </head>
   <body>
@@ -16,6 +64,10 @@
         <li><a href="basket.html">Winkelwagen</a></li>
         <li><a href="order.html">Kassa</a></li>
       </ul>
+      <a href="/basket.html" class="basket">
+        <div>Winkelwagen</div>
+        <div class="basket_num"></div>
+      </a>
     </nav>
     <main id="index">
       <h1>Artikelen</h1>
@@ -35,8 +87,9 @@
         <img class="card_image">
         <div class="card_price">€</div>
         <div class="card_code"></div>
-        <input type="number" value="1">
-        <button onClick="addToBasket(1,10)">+</button>
+        <input class="card_amount" type="number" value="1">
+        <input class="card_id" type="hidden" name="id">
+        <button onClick="addClosestToBasket(this)">+</button>
       </div>
     </template> 
     <script>
@@ -47,6 +100,8 @@
         const template = document.querySelector('#productcard');
 
         const app = document.getElementById('index')
+        window.basket_num = document.querySelector('.basket_num')
+        updateBasket()
 
         const container = document.createElement('div')
         container.setAttribute('class', 'container')
@@ -65,6 +120,7 @@
                 clone.querySelector(".card_description").textContent =`${product.description}...`
                 clone.querySelector(".card_price").textContent += product.price
                 clone.querySelector(".card_code").textContent = product.code
+                clone.querySelector(".card_id").value = product.id
                 clone.querySelector(".card_image").src =`/images/${product.id}.jpg`
 
                 container.appendChild(clone)
@@ -76,25 +132,9 @@
               app.appendChild(errorMessage)
             }
           }
-          request.send()
+        request.send()
 
-          // make sure we can listen to storage chnanges on the same page
-          // https://stackoverflow.com/a/43634169/430721
-          var originalSetItem = localStorage.setItem;
-          localStorage.setItem = function(key, value) {
-            var event = new Event('itemInserted');
 
-            event.value = value; // Optional..
-            event.key = key; // Optional..
-
-            document.dispatchEvent(event);
-
-            originalSetItem.apply(this, arguments);
-          };
-          var localStorageSetHandler = function(e) {
-            console.log('localStorage.set("' + e.key + '", "' + e.value + '") was called');
-          };
-          document.addEventListener("itemInserted", localStorageSetHandler, false);
 
       })();
     </script>
