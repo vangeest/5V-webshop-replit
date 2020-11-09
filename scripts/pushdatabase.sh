@@ -44,5 +44,6 @@ rm /tmp/t.txt
 
 echo "---> stopping tmp webserver..."
 kill -1 `cat ./srv/pid`
+rm ./srv/data/shop.dump
 
 

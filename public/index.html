@@ -1,59 +1,43 @@
 <html>
   </head>
     <!-- add css link-->
+    <script src="/js/basket.js"></script>
     <script>
-      function addClosestToBasket(el){
-        var parent = el.parentNode
-        var amount = parseInt(parent.querySelector('.card_amount').value)
-        var id = parent.querySelector('.card_id').value
-        addToBasket(id, amount)
+    // make sure we can listen to storage chnanges on the same page
+    // https://stackoverflow.com/a/43634169/430721
+    var originalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+      var event = new Event('itemInserted');
+
+      event.value = value; // Optional..
+      event.key = key; // Optional..
+
+      document.dispatchEvent(event);
+
+      originalSetItem.apply(this, arguments);
+    };
+
+    function updateBasket(value){
+      const basket = value||readBasket()
+      var num = 0;
+      for (let key in basket) {
+        num += parseInt(basket[key])
       }
-
-      function readBasket() {
-        return JSON.parse(localStorage.getItem('basket')||'{}')
+      if( num == 0){
+        window.basket_num.textContent = "(leeg)"
+      } else if( num == 1) {
+        window.basket_num.textContent = `${num} item`
+      } else {
+        window,basket_num.textContent = `${num} items`
       }
+    }
 
-      function addToBasket(id, amount) {
-        var basket = readBasket()
-        basket[id] = amount + (basket[id]||0)
-        localStorage.setItem('basket', JSON.stringify(basket))
+    var localStorageSetHandler = function(e) {
+      if(e.key === "basket") {
+        updateBasket(JSON.parse(e.value))
       }
-
-      // make sure we can listen to storage chnanges on the same page
-      // https://stackoverflow.com/a/43634169/430721
-      var originalSetItem = localStorage.setItem;
-      localStorage.setItem = function(key, value) {
-        var event = new Event('itemInserted');
-
-        event.value = value; // Optional..
-        event.key = key; // Optional..
-
-        document.dispatchEvent(event);
-
-        originalSetItem.apply(this, arguments);
-      };
-
-      function updateBasket(value){
-        const basket = value||readBasket()
-        var num = 0;
-        for (let key in basket) {
-          num += parseInt(basket[key])
-        }
-        if( num == 0){
-          window.basket_num.textContent = "(leeg)"
-        } else if( num == 1) {
-          window.basket_num.textContent = `${num} item`
-        } else {
-          window,basket_num.textContent = `${num} items`
-        }
-      }
-
-      var localStorageSetHandler = function(e) {
-        if(e.key === "basket") {
-          updateBasket(JSON.parse(e.value))
-       }
-      };
-      document.addEventListener("itemInserted", localStorageSetHandler, false);
+    };
+    document.addEventListener("itemInserted", localStorageSetHandler, false);
 
     </script>
   </head>
@@ -82,13 +66,13 @@
     <!-- template for product info-->
     <template id="productcard">
       <div class="card">
-        <h1 class="card_title"></h1>
-        <p class="card_description"></p>
-        <img class="card_image">
-        <div class="card_price">€</div>
-        <div class="card_code"></div>
-        <input class="card_amount" type="number" value="1">
-        <input class="card_id" type="hidden" name="id">
+        <h1 class="product_title"></h1>
+        <p class="product_description"></p>
+        <img class="product_image">
+        <div class="product_price">€</div>
+        <div class="product_code"></div>
+        <input class="product_amount" type="number" value="1">
+        <input class="product_id" type="hidden" name="id">
         <button onClick="addClosestToBasket(this)">+</button>
       </div>
     </template> 
@@ -116,12 +100,12 @@
               data.forEach((product) => {
 
                 const clone = template.content.cloneNode(true);
-                clone.querySelector(".card_title").textContent = product.name
-                clone.querySelector(".card_description").textContent =`${product.description}...`
-                clone.querySelector(".card_price").textContent += product.price
-                clone.querySelector(".card_code").textContent = product.code
-                clone.querySelector(".card_id").value = product.id
-                clone.querySelector(".card_image").src =`/images/${product.id}.jpg`
+                clone.querySelector(".product_title").textContent = product.name
+                clone.querySelector(".product_description").textContent =`${product.description}...`
+                clone.querySelector(".product_price").textContent += product.price
+                clone.querySelector(".product_code").textContent = product.code
+                clone.querySelector(".product_id").value = product.id
+                clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
 
                 container.appendChild(clone)
 
