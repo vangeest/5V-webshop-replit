@@ -1,57 +1,14 @@
 <html>
   </head>
     <!-- add css link-->
-    <script src="/js/basket.js"></script>
-    <script>
-    // make sure we can listen to storage chnanges on the same page
-    // https://stackoverflow.com/a/43634169/430721
-    var originalSetItem = localStorage.setItem;
-    localStorage.setItem = function(key, value) {
-      var event = new Event('itemInserted');
-
-      event.value = value; // Optional..
-      event.key = key; // Optional..
-
-      document.dispatchEvent(event);
-
-      originalSetItem.apply(this, arguments);
-    };
-
-    function updateBasket(value){
-      const basket = value||readBasket()
-      var num = 0;
-      for (let key in basket) {
-        num += parseInt(basket[key])
-      }
-      if( num == 0){
-        window.basket_num.textContent = "(leeg)"
-      } else if( num == 1) {
-        window.basket_num.textContent = `${num} item`
-      } else {
-        window,basket_num.textContent = `${num} items`
-      }
-    }
-
-    var localStorageSetHandler = function(e) {
-      if(e.key === "basket") {
-        updateBasket(JSON.parse(e.value))
-      }
-    };
-    document.addEventListener("itemInserted", localStorageSetHandler, false);
-
-    </script>
   </head>
   <body>
     <nav>
       <ul>
         <li class="active"><a href="index.html">Artikelen</a></li>
-        <li><a href="basket.html">Winkelwagen</a></li>
+        <li><a href="basket.html">Winkelwagen <span class="basket_num"></span></a></li>
         <li><a href="order.html">Kassa</a></li>
       </ul>
-      <a href="/basket.html" class="basket">
-        <div>Winkelwagen</div>
-        <div class="basket_num"></div>
-      </a>
     </nav>
     <main id="index">
       <h1>Artikelen</h1>
@@ -73,18 +30,15 @@
         <div class="product_code"></div>
         <input class="product_amount" type="number" value="1">
         <input class="product_id" type="hidden" name="id">
-        <button onClick="addClosestToBasket(this)">+</button>
+        <button onClick="addClosestToBasket(this)">🛒</button>
       </div>
     </template> 
+    <script src="/js/basket.js"></script>
     <script>
       (function() {
-        // your page initialization code here
-        // the DOM will be available here
-
         const template = document.querySelector('#productcard');
-
         const app = document.getElementById('index')
-        window.basket_num = document.querySelector('.basket_num')
+        
         updateBasket()
 
         const container = document.createElement('div')
@@ -117,8 +71,6 @@
             }
           }
         request.send()
-
-
 
       })();
     </script>
