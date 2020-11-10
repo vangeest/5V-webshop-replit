@@ -32,12 +32,21 @@
         <div class="product_amount_show"></div>
         <input class="product_id" type="hidden" name="id">
         <input class="product_amount" type="hidden" value="1">
-        <button onClick="addClosestToBasket(this, '.product_amount_show')">+</button>
-        <button onClick="removeClosestFromBasket(this, '.product_amount_show')">-</button>
+        <button onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
+        <button onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
+        <button onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
       </div>
     </template>
     <script src="/js/basket.js"></script>
     <script>
+        function setIfEmptyMsg() {
+          const basket = readBasket()
+          var numkeys = Object.keys(basket).length
+          if(numkeys == 0) {
+            window.container.setAttribute('class', 'container empty')
+            window.container.textContent = 'je winkelwagen is leeg'
+          }
+        }
       (function() {
         // your page initialization code here
         // the DOM will be available here
@@ -47,6 +56,7 @@
 
         const container = document.createElement('div')
         container.setAttribute('class', 'container')
+        window.container = container
 
         app.appendChild(container)
         
@@ -78,7 +88,10 @@
 
         var keys = Object.keys(basket)
         key = keys.pop()
-        loadProduct(key, keys);    
+        if(key) {
+          loadProduct(key, keys);
+        } 
+        setIfEmptyMsg()
 
       })();
     </script>

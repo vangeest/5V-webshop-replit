@@ -3,14 +3,20 @@ function getClosest(el, qry) {
   return parent.querySelector(qry)
 }
 
-function removeClosestFromBasket(el, showDivQry){
+function removeClosestCompletelyFromBasket(el){
+  const id = getClosest(el, '.product_id').value
+  removeCompletelyFromBasket(id)
+  el.parentNode.remove()
+}
+
+function removeAmountClosestFromBasket(el, showDivQry){
   const amount = parseInt(getClosest(el, '.product_amount').value)
   const id = getClosest(el, '.product_id').value
   const showEl = getClosest(el, showDivQry)
   removeFromBasket(id , amount, showEl)
 }
 
-function addClosestToBasket(el, showDivQry){
+function addAmountClosestToBasket(el, showDivQry){
   const amount = parseInt(getClosest(el, '.product_amount').value)
   const id = getClosest(el, '.product_id').value
   const showEl = getClosest(el, showDivQry)
@@ -27,6 +33,15 @@ function addToBasket(id, amount, showEl) {
   localStorage.setItem('basket', JSON.stringify(basket))
   if(showEl) {
     showEl.textContent = basket[id]
+  }
+}
+
+function removeCompletelyFromBasket(id, rowEl) {
+  var basket = readBasket()
+  delete basket[id]
+  localStorage.setItem('basket', JSON.stringify(basket))
+  if(rowEl) {
+    showEl.remove()
   }
 }
 

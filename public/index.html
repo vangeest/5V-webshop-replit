@@ -28,9 +28,9 @@
         <img class="product_image">
         <div class="product_price">€</div>
         <div class="product_code"></div>
-        <input class="product_amount" type="number" value="1">
+        <input class="product_amount" type="number" value="1" min="1">
         <input class="product_id" type="hidden" name="id">
-        <button onClick="addClosestToBasket(this)">🛒</button>
+        <button onClick="addAmountClosestToBasket(this)">🛒</button>
       </div>
     </template> 
     <script src="/js/basket.js"></script>
