@@ -30,7 +30,7 @@
         <div class="product_price">€</div>
         <div class="product_code"></div>
         <div class="product_amount_show"></div>
-        <input class="product_id" type="hidden" name="id">
+        <input class="product_id" type="hidden" name="id" data-json="">
         <input class="product_amount" type="hidden" value="1">
         <button onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
         <button onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
@@ -63,34 +63,22 @@
         const basket = readBasket()
         window.basket = basket
 
-        function loadProduct(key, keys) {  
-          var xmlHttpRequest = new XMLHttpRequest();  
-          xmlHttpRequest.open("GET", `/api/products/${key}`, true);  
-          xmlHttpRequest.onreadystatechange = function () {  
-            if (this.readyState == 4 && this.status == 200) {  
-              var product = JSON.parse(this.responseText)
-              const clone = template.content.cloneNode(true);
-              clone.querySelector(".product_name").textContent = product.name
-              clone.querySelector(".product_price").textContent += product.price
-              clone.querySelector(".product_code").textContent = product.code
-              clone.querySelector(".product_id").value = product.id
-              clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
-              clone.querySelector(".product_amount_show").textContent = basket[key]             
-              container.appendChild(clone)
-              if(keys.length > 0) {
-                const key = keys.pop()
-                loadProduct(key, keys);    
-              }                    
-            }  
-          }  
-          xmlHttpRequest.send();  
-        }  
+        function showProduct(product, amount) {
+          const clone = template.content.cloneNode(true);
+          clone.querySelector(".product_name").textContent = product.name
+          clone.querySelector(".product_price").textContent += product.price
+          clone.querySelector(".product_code").textContent = product.code
+          clone.querySelector(".product_id").value = product.id
+          clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
+          clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
+          clone.querySelector(".product_amount_show").textContent = amount             
+          container.appendChild(clone)
+        }
 
-        var keys = Object.keys(basket)
-        key = keys.pop()
-        if(key) {
-          loadProduct(key, keys);
-        } 
+        Object.keys(basket).forEach(id => {
+            showProduct(JSON.parse(localStorage.getItem(`item_${id}`)), basket[id])
+        })
+
         setIfEmptyMsg()
 
       })();

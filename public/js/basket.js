@@ -4,53 +4,55 @@ function getClosest(el, qry) {
 }
 
 function removeClosestCompletelyFromBasket(el){
-  const id = getClosest(el, '.product_id').value
-  removeCompletelyFromBasket(id)
+  const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
+  removeCompletelyFromBasket(product)
   el.parentNode.remove()
 }
 
 function removeAmountClosestFromBasket(el, showDivQry){
   const amount = parseInt(getClosest(el, '.product_amount').value)
-  const id = getClosest(el, '.product_id').value
+  const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
   const showEl = getClosest(el, showDivQry)
-  removeFromBasket(id , amount, showEl)
+  removeFromBasket(product , amount, showEl)
 }
 
 function addAmountClosestToBasket(el, showDivQry){
   const amount = parseInt(getClosest(el, '.product_amount').value)
-  const id = getClosest(el, '.product_id').value
+  const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
   const showEl = getClosest(el, showDivQry)
-  addToBasket(id , amount, showEl)
+  addToBasket(product , amount, showEl)
 }
 
 function readBasket() {
   return JSON.parse(localStorage.getItem('basket')||'{}')
 }
 
-function addToBasket(id, amount, showEl) {
+function addToBasket(product, amount, showEl) {
   var basket = readBasket()
-  basket[id] = amount + (basket[id]||0)
+  basket[product.id] = amount + (basket[product.id]||0)
   localStorage.setItem('basket', JSON.stringify(basket))
+  localStorage.setItem(`item_${product.id}`, JSON.stringify(product))
   if(showEl) {
-    showEl.textContent = basket[id]
+    showEl.textContent = basket[product.id]
   }
 }
 
-function removeCompletelyFromBasket(id, rowEl) {
+function removeCompletelyFromBasket(product, rowEl) {
   var basket = readBasket()
-  delete basket[id]
+  delete basket[product.id]
+  localStorage.removeItem(`item_${product.id}`)
   localStorage.setItem('basket', JSON.stringify(basket))
   if(rowEl) {
     showEl.remove()
   }
 }
 
-function removeFromBasket(id, amount, showEl) {
+function removeFromBasket(product, amount, showEl) {
   var basket = readBasket()
-  basket[id] =  Math.max(1, ((basket[id]||0) - amount))
+  basket[product.id] =  Math.max(1, ((basket[product.id]||0) - amount))
   localStorage.setItem('basket', JSON.stringify(basket))
   if(showEl) {
-    showEl.textContent = basket[id]
+    showEl.textContent = basket[product.id]
   }
 }
 

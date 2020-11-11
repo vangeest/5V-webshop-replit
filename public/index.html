@@ -29,7 +29,7 @@
         <div class="product_price">€</div>
         <div class="product_code"></div>
         <input class="product_amount" type="number" value="1" min="1">
-        <input class="product_id" type="hidden" name="id">
+        <input class="product_id" type="hidden" name="id" data-json="">
         <button onClick="addAmountClosestToBasket(this)">🛒</button>
       </div>
     </template> 
@@ -59,6 +59,7 @@
                 clone.querySelector(".product_price").textContent += product.price
                 clone.querySelector(".product_code").textContent = product.code
                 clone.querySelector(".product_id").value = product.id
+                clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
                 clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
 
                 container.appendChild(clone)
