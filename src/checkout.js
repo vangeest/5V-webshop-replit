@@ -6,6 +6,9 @@ const checkoutOrder = (request, response) => {
   var { firstName, lastName, email, articles } = request.body
 
   articles = articles || []
+  if(!Array.isArray(articles)) {
+    articles = [ articles ]
+  }
 
   var body = `we recieved a new order from\n\n`+
    `name: ${firstName||'-'} ${lastName||'-'}\n`+

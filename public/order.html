@@ -28,17 +28,43 @@
       <!--sent a mail with all the info, maybe put it in the database as well-->
       <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie.<p>
       <p>Zodra je betaald hebt, stuur ik de spullen op.</p>
-      <button type="button" onclick="alert('hi');window.checkout()">Bestellen</button>
+      <button type="button" onclick="alert('hi');checkout()">Bestellen</button>
       <p id="resp"></p>
     </main>
     <footer>
       <hr>
       <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
     </footer>
+    <template id="productrow">
+      <div class="card">
+        <input class="product_amount" type="hidden">
+        <input class="product_id" type="hidden" name="articles" >
+      </div>
+    </template> 
     <script src="/js/basket.js"></script>
-       <script>
-      (function() {
-        updateBasket()
+    <script>
+    updateBasket()
+    const template = document.querySelector('#productrow');
+    const form = document.getElementById('orderForm')
+
+    const container = document.createElement('div')
+    container.setAttribute('class', 'container')
+
+    form.appendChild(container)
+
+    const basket = readBasket()
+
+    function productData(id, amount) {
+      const clone = template.content.cloneNode(true);
+      clone.querySelector(".product_amount").name = `item_${id}`
+      clone.querySelector(".product_amount").value = amount
+      clone.querySelector(".product_id").value += id
+      container.appendChild(clone)
+    }
+
+    Object.keys(basket).forEach(id => {
+        productData(id, basket[id])
+    })
 
 
     function urlencodeFormData(fd){
@@ -51,20 +77,8 @@
 
     var formElement = document.querySelector('#orderForm')
 
-
     function checkout() {
-      console.log('aaaa')
       var formData = new FormData(formElement);
-      // formData.append('firstName', 'Bill');
-      // formData.append('lastName', 'Gates');
-      // formData.append('email', 'bill@microsoft.com');
-      // formData.append('articles', 1);
-      // formData.append('articles', 2);
-      // formData.append('articles', 3);
-      // formData.append('articles', 4);
-      // formData.append('articles', 5);
-
-
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/checkout');
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -73,10 +87,6 @@
       };
       xhr.send(urlencodeFormData(formData))
     }
-    // FIXME try not do this
-    window.checkout = checkout
-
-      })();
     </script>
 
   </body>
