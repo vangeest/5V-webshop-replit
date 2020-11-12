@@ -9,7 +9,7 @@
     <nav>
       <ul>
         <li><a href="index.html">Artikelen</a></li>
-        <li><a href="basket.html">Winkelwagen <span class="basket_num"></span></a></a></li>
+        <li><a href="basket.html">Winkelwagen <span class="num_products"></span></a></a></li>
         <li class="active"><a href="order.html">Kassa</a></li>
       </ul>
     </nav>
@@ -73,6 +73,7 @@
       };
       xhr.send(urlencodeFormData(formData))
     }
+    // FIXME try not do this
     window.checkout = checkout
 
       })();

@@ -7,16 +7,22 @@
     <nav>
       <ul>
         <li><a href="index.html">Artikelen</a></li>
-        <li class="active"><a href="basket.html">Winkelwagen <span class="basket_num"></span></a></li>
+        <li class="active"><a href="basket.html">Winkelwagen <span class="num_products"></span></a></li>
         <li><a href="order.html">Kassa</a></li>
       </ul>
     </nav>
-    <main id="index">
-      <h1>Winkelwagen</h1>
-      <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
-      <p>Door op plus en min te drukken kun je het aantal per artikel aanpassen</p>
-      <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
-      <!-- optional: add some neat stuff (jQuery?) to update the amount per article in the product-->
+    <main>
+      <div id="index">
+        <h1>Winkelwagen</h1>
+        <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
+        <p>Door op plus en min te drukken kun je het aantal per artikel aanpassen</p>
+        <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
+        <!-- optional: add some neat stuff (jQuery?) to update the amount per article in the product-->
+      </div>
+      <div>
+        <div>Totaal</div>
+        <div>€<span class="sum_products">0.00</span>
+      </div>
     </main>
     <footer>
       <hr>
@@ -33,7 +39,7 @@
         <input class="product_id" type="hidden" name="id" data-json="">
         <input class="product_amount" type="hidden" value="1">
         <button onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
-        <button onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
+        <button onClick="removeAmountClosestFromBasket(this)">-</button>
         <button onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
       </div>
     </template>
@@ -43,8 +49,8 @@
           const basket = readBasket()
           var numkeys = Object.keys(basket).length
           if(numkeys == 0) {
-            window.container.setAttribute('class', 'container empty')
-            window.container.textContent = 'je winkelwagen is leeg'
+            document.querySelector('.container').setAttribute('class', 'container empty')
+            document.querySelector('.container').textContent = 'je winkelwagen is leeg'
           }
         }
       (function() {
@@ -56,12 +62,10 @@
 
         const container = document.createElement('div')
         container.setAttribute('class', 'container')
-        window.container = container
 
         app.appendChild(container)
         
         const basket = readBasket()
-        window.basket = basket
 
         function showProduct(product, amount) {
           const clone = template.content.cloneNode(true);

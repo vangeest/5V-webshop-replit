@@ -30,8 +30,8 @@ function readBasket() {
 function addToBasket(product, amount, showEl) {
   var basket = readBasket()
   basket[product.id] = amount + (basket[product.id]||0)
-  localStorage.setItem('basket', JSON.stringify(basket))
   localStorage.setItem(`item_${product.id}`, JSON.stringify(product))
+  localStorage.setItem('basket', JSON.stringify(basket))
   if(showEl) {
     showEl.textContent = basket[product.id]
   }
@@ -40,8 +40,8 @@ function addToBasket(product, amount, showEl) {
 function removeCompletelyFromBasket(product, rowEl) {
   var basket = readBasket()
   delete basket[product.id]
-  localStorage.removeItem(`item_${product.id}`)
   localStorage.setItem('basket', JSON.stringify(basket))
+  localStorage.removeItem(`item_${product.id}`)
   if(rowEl) {
     showEl.remove()
   }
@@ -56,25 +56,43 @@ function removeFromBasket(product, amount, showEl) {
   }
 }
 
-function updateBasket(value){
-  const basket = value||readBasket()
+function basketNumItems(_basket) {
+  const basket = _basket||readBasket()
   var num = 0;
   for (let key in basket) {
     num += parseInt(basket[key])
   }
-  if( num == 0){
-    window.basket_num.textContent = "(leeg)"
-  } else if( num == 1) {
-    window.basket_num.textContent = `(${num} item)`
-  } else {
-    window.basket_num.textContent = `(${num} items)`
+  return num
+}
+
+function basketTotalPrice(_basket) {
+  const basket = _basket||readBasket()
+  var price = 0;
+  for (let key in basket) {
+    const product = JSON.parse(localStorage.getItem(`item_${key}`))
+    price += parseInt(basket[key]) * parseFloat(product.price)
   }
+  return price
+}
+
+function updateBasket(basket){
+  const num = basketNumItems(basket)
+  const sum = basketTotalPrice(basket)
+  document.querySelectorAll('.sum_products').forEach( el => el.textContent = sum.toFixed(2))
+  document.querySelectorAll('.num_products').forEach( el => {
+    if( num == 0){
+        el.textContent = "(leeg)"
+    } else if( num == 1) {
+        el.textContent = `(${num} item)`
+    } else {
+        el.textContent = `(${num} items)`
+    }
+  })
 }
 
 (function() {
   // your page initialization code here
   // the DOM will be available here
-  window.basket_num = document.querySelector('.basket_num')
   var originalSetItem = localStorage.setItem;
   localStorage.setItem = function(key, value) {
     var event = new Event('itemInserted');
