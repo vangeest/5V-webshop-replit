@@ -8,6 +8,7 @@
     "push:db": "cd scripts &&  ./pushdatabase.sh"
   },
   "dependencies": {
+    "dateformat": "^3.0.3",
     "express": "^4.17.1",
     "nodemailer": "^6.4.14",
     "pg": "^8.4.2"

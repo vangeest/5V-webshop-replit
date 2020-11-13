@@ -31,6 +31,15 @@ const getProducts = (_request, response) => {
   })
 }
 
+const getProductsByIds = (ids, callback) => {
+  pool.query(
+    'SELECT * FROM products WHERE id = ANY($1::int[])',
+    [ids],  // array of query arguments
+    function(_err, result) {
+      callback(result.rows)
+    })
+};
+
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id)
   pool.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {
@@ -85,4 +94,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductsByIds
 }

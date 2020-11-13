@@ -11,7 +11,7 @@ function sendMail(subject, body) {
     from: process.env.GMAIL_EMAIL,
     to: process.env.ORDER_MAIL_TO,
     subject: subject,
-    text: body
+    html: body
   };
 
   if(!mailConfigOK()) {

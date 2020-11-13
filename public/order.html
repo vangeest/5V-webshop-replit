@@ -88,7 +88,7 @@
     </template>
     <template id="productsum">
       <tr>
-        <td colspan="3"></td>
+        <td colspan="3">Totaal</td>
         <td class="product_sum">€</td>
       </tr>
     </template> 
@@ -141,6 +141,8 @@
       xhr.open('POST', '/api/checkout');
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onload = function () {
+       // FIXME: try/catch show error OR clean basket redirect to thank-you page
+       // data = JSON.parse(this.responseText)
         document.getElementById('resp').textContent += this.responseText
       };
       xhr.send(urlencodeFormData(formData))
