@@ -1,3 +1,7 @@
+function getProductInfo(id) {
+  return JSON.parse(localStorage.getItem(`item_${id}`))
+}
+
 function getClosest(el, qry) {
   var parent = el.parentNode
   return parent.querySelector(qry)

@@ -17,18 +17,59 @@
       <h1>Bestellen</h1>
       <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
       <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
+
       <p>vul je adresgegevens in<p>
       <form id="orderForm">
-        <div><div>Voornaam<div><div><input name="firstName"></div></div>
-        <div><div>Archternaam<div><div><input name="lastName"></div></div>
-        <div><div>Email<div><div><input name="email"></div></div>
+       <table id="index">
+      </table>
+        <div>
+          <div>Voornaam<div>
+          <div>
+            <input required 
+                   name="firstName" 
+                   placeholder="Voornaam" 
+                   oninvalid="this.setCustomValidity('Voornaam is verplicht')" 
+                   onchange="this.setCustomValidity('')">
+          </div>
+        </div>
+        <div>
+          <div>Achternaam<div>
+          <div><input required 
+                      name="lastName" 
+                      placeholder="Achternaam"
+                      oninvalid="this.setCustomValidity('Archternaam is verplicht')" 
+                      onchange="this.setCustomValidity('')">
+          </div>
+        </div>
+        <div>
+          <div>Email<div>
+          <div><input required 
+                      type="email" 
+                      name="email" 
+                      placeholder="user@example.com"
+                      oninvalid="this.setCustomValidity('Geen geldig email adres opgegeven')" 
+                      onchange="this.setCustomValidity('')">
+          </div>
+        </div>
+        <div>
+          <div>Mobiel<div>
+          <div><input required 
+                      type="tel" 
+                      name="phone" 
+                      placeholder="06123456789" 
+                      pattern="^\(?([+]31|0031|0)-?6(\s?|-)([0-9]\s{0,3}){8}$"
+                      oninvalid="this.setCustomValidity('Geen geldig mobiel nummer opgegeven')" 
+                      onchange="this.setCustomValidity('')">
+          </div>
+        </div>
+
+        <p>klik op bestellen<p>
+        <!--sent a mail with all the info, maybe put it in the database as well-->
+        <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie.<p>
+        <p>Zodra je betaald hebt, stuur ik de spullen op.</p>
+        <button type="button" onclick="checkout()">Bestellen</button>
       </form>
 
-      <p>klik op bestellen<p>
-      <!--sent a mail with all the info, maybe put it in the database as well-->
-      <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie.<p>
-      <p>Zodra je betaald hebt, stuur ik de spullen op.</p>
-      <button type="button" onclick="alert('hi');checkout()">Bestellen</button>
       <p id="resp"></p>
     </main>
     <footer>
@@ -36,35 +77,49 @@
       <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
     </footer>
     <template id="productrow">
-      <div class="card">
-        <input class="product_amount" type="hidden">
+      <tr>
+        <input class="product_amount_input" type="hidden">
         <input class="product_id" type="hidden" name="articles" >
-      </div>
+        <td class="product_code" ></td>
+        <td class="product_name"></td>
+        <td class="product_amount"></td>
+        <td class="product_price">€</td>
+      </tr>
+    </template>
+    <template id="productsum">
+      <tr>
+        <td colspan="3"></td>
+        <td class="product_sum">€</td>
+      </tr>
     </template> 
     <script src="/js/basket.js"></script>
     <script>
     updateBasket()
     const template = document.querySelector('#productrow');
-    const form = document.getElementById('orderForm')
-
-    const container = document.createElement('div')
-    container.setAttribute('class', 'container')
-
-    form.appendChild(container)
+    const totalTemplate = document.querySelector('#productsum');
+    const index = document.getElementById('index')
 
     const basket = readBasket()
 
-    function productData(id, amount) {
+    function productData(product, amount) {
       const clone = template.content.cloneNode(true);
-      clone.querySelector(".product_amount").name = `item_${id}`
-      clone.querySelector(".product_amount").value = amount
-      clone.querySelector(".product_id").value += id
-      container.appendChild(clone)
+      clone.querySelector(".product_amount_input").name = `item_${product.id}`
+      clone.querySelector(".product_amount_input").value = amount
+      clone.querySelector(".product_id").value += product.id
+      clone.querySelector(".product_code").textContent = product.code
+      clone.querySelector(".product_amount").textContent = amount
+      clone.querySelector(".product_name").textContent = product.name
+      clone.querySelector(".product_price").textContent += product.price
+      index.appendChild(clone)
     }
 
     Object.keys(basket).forEach(id => {
-        productData(id, basket[id])
+        productData(getProductInfo(id), basket[id])
     })
+    const clone = totalTemplate.content.cloneNode(true);
+    clone.querySelector(".product_sum").textContent += basketTotalPrice().toFixed(2)
+    index.appendChild(clone)
+
 
 
     function urlencodeFormData(fd){
@@ -78,6 +133,9 @@
     var formElement = document.querySelector('#orderForm')
 
     function checkout() {
+      if(!formElement.reportValidity()){
+        return
+      }
       var formData = new FormData(formElement);
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/checkout');
