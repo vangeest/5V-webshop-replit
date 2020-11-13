@@ -31,11 +31,15 @@ heroku login -i
 
 ### Maak Heroku app
 
+verzin een leuke naam, bv funkywebshop
+
 ```
-heroku create
+heroku create funkywebshop
 ```
 
-onthoudt de naam van je app (bv `young-plains-71844`)
+onthoudt de naam van je app (bv `funkywebshop)
+
+het domein wordt dan (https://funkywebshop.herokuapp.com/)
 
 ### Maak een database
 
