@@ -28,7 +28,6 @@ const checkoutOrder = (request, response) => {
 
     var total = 0;
     for (let id in basket) {
-      console.log(`${id} ${basket[id]} ${JSON.stringify(products[id])}`)
       total += basket[id]*products[id].price
     }
     var articleTable = "<table>"

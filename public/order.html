@@ -141,9 +141,7 @@
       xhr.open('POST', '/api/checkout');
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
-        console.log("State: ", this.readyState, "Status: ", this.status);
         if (this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText)
           emptyBasket()
           var data = JSON.parse(this.responseText)
           window.location.href = `thankyou.html?orderId=${data.orderId}`
