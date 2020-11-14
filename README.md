@@ -118,7 +118,7 @@ done
 
 - [X] deploy to heroku
 - [X] serve static files
-- [ ] add some rest calls
+- [x] add some rest calls
 - [ ] more complex model
-- [ ] documentation for students
-- [ ] automate/optimize heroko deploy
+- [x] documentation for students
+- [x] automate/optimize heroko deploy
