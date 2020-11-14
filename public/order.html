@@ -140,11 +140,19 @@
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/api/checkout');
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.onload = function () {
-       // FIXME: try/catch show error OR clean basket redirect to thank-you page
-       // data = JSON.parse(this.responseText)
-        document.getElementById('resp').textContent += this.responseText
-      };
+      xhr.onreadystatechange = function() {
+        console.log("State: ", this.readyState, "Status: ", this.status);
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText)
+          emptyBasket()
+          var data = JSON.parse(this.responseText)
+          window.location.href = `thankyou.html?orderId=${data.orderId}`
+        } else if (this.readyState == 4) {
+          document.getElementById('resp').textContent += this.responseText
+        } else {
+            //not ready yet
+        }
+      }
       xhr.send(urlencodeFormData(formData))
     }
     </script>

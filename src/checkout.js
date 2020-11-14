@@ -18,6 +18,7 @@ const checkoutOrder = (request, response) => {
     basket[id]= request.body[`item_${id}`]
   })
 
+  // order id: date + random number
   const orderId = dateFormat(new Date(), "yyyymmddhhMMss-") + Math.floor(Math.random()*1000);
 
   db.getProductsByIds(articles, function(rows){
@@ -38,7 +39,7 @@ const checkoutOrder = (request, response) => {
     articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
     articleTable += "</table>"
 
-    var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b>ontvangen van <br><br>\n`+
+    var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n`+
    `Naam: ${firstName||'-'} ${lastName||'-'}<br>\n`+
    `Email: ${email||'-'}<br>\n`+
    `Telefoon: ${phone||'-'}<br>\n`+

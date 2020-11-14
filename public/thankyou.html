@@ -1,0 +1,40 @@
+<html>
+  </head>
+    <!-- add css link-->
+    <script>
+    </script>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Artikelen</a></li>
+        <li><a href="basket.html">Winkelwagen <span class="num_products"></span></a></a></li>
+        <li class="active"><a href="order.html">Kassa</a></li>
+      </ul>
+    </nav>
+    <main>
+      <h1>Bedankt!</h1>
+      <p>Je bestelling met nummer <b id="orderId"></b> is in goede orde ontvangen</p>
+      <p>We gaan voor je aan de slag!</p>
+      <p>groet,</p>
+      <p>The shopping team</a>
+      </form>
+
+      <p id="resp"></p>
+    </main>
+    <footer>
+      <hr>
+      <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
+    </footer>
+    <script src="/js/basket.js"></script>
+    <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+    const orderIdEl = document.getElementById('orderId')
+    orderIdEl.textContent = orderId
+
+    updateBasket()
+    </script>
+
+  </body>
+</html>

@@ -27,6 +27,11 @@ function addAmountClosestToBasket(el, showDivQry){
   addToBasket(product , amount, showEl)
 }
 
+function emptyBasket() {
+  // maybe clearing completly a bit too much?
+  localStorage.clear()
+}
+
 function readBasket() {
   return JSON.parse(localStorage.getItem('basket')||'{}')
 }
