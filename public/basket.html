@@ -19,9 +19,10 @@
         <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
         <!-- optional: add some neat stuff (jQuery?) to update the amount per article in the product-->
       </div>
-      <div>
+      <div id="to_checkout">
         <div>Totaal</div>
         <div>€<span class="sum_products">0.00</span>
+        <div>Ga naar de <a href="order.html">Kassa</a> om af te rekenen</div>
       </div>
     </main>
     <footer>
@@ -51,6 +52,9 @@
           if(numkeys == 0) {
             document.querySelector('.container').setAttribute('class', 'container empty')
             document.querySelector('.container').textContent = 'je winkelwagen is leeg'
+            document.querySelector('#to_checkout').style.display = "none"
+          }else{
+            document.querySelector('#to_checkout').style.display = "block"
           }
         }
       (function() {
