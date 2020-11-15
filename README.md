@@ -49,9 +49,11 @@ heroku addons:create heroku-postgresql:hobby-dev
 
 ### Kopieer je database naar Heroku
 
-vanaf de project root (/workspace/<project-name>)
+vanaf de project root (/workspace/project-name)\
+project-name is de naam van je repo
 
 ```
+ cd /workspace/<project-name>
  yarn push:db <app-name>
 ```
 
