@@ -69,6 +69,20 @@ project-name is de naam van je repo
  yarn push:db <app-name>
 ```
 
+### Zet je mail configuratie
+
+Je krijgt een email account en wachtwoord 
+
+```
+heroku config:set GMAIL_EMAIL=<email account>
+heroku config:set GMAIL_PASSWORD=<email wachtwoord>
+heroku config:set ORDER_MAIL_TO=<jouw email waar je orders ontvangt>
+```
+
+Dit maakt environment variables in heroku. In gitpod doe je dit met `export  <naam>=<waarde>`  - mailen vanuit gitpod gaat niet, omdat de poort daarvoor geblocked is. 
+
+
+
 ### Push de code naar heroku
 
 ```
