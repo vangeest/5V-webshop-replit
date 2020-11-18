@@ -10,12 +10,13 @@ https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-
 https://expressjs.com/en/starter/static-files.html
 * basic html & css & javascript reference\
 https://www.w3schools.com
-* basic sql course
+* basic sql course\
 https://www.khanacademy.org/computing/computer-programming/sql
 * shoppping basket lokaal opslaan\
 google op local storage javascript basket
 * bestelling mailen\
-heroku specifieke oplossing, zie aldaar
+heroku specifieke oplossing, zie aldaar\
+generieke uitleg vind je hier: https://youtu.be/Va9UKGs1bwI
 
 ## over de tools
 * gitpod online editor en hosting ontwikkelomgeving\
@@ -39,7 +40,7 @@ https://devcenter.heroku.com/
 heroku login -i
 ```
 
-(note: `heroku login` werkt niet op gitpod) 
+(note: de optie `-i` is nodig in gitpod) 
 
 ### Maak Heroku app
 
