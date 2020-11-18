@@ -40,7 +40,7 @@ https://devcenter.heroku.com/
 heroku login -i
 ```
 
-(note: de optie `-i` is nodig in gitpod) 
+(note: de optie `-i` is nodig voor gitpod) 
 
 ### Maak Heroku app
 
@@ -105,7 +105,7 @@ Deze commando's run je iedere keer nadat je gitpod opnieuw opstart.
 heroku login -i
 ```
 
-(note: heroku login werkt niet op gitpod) 
+(note: de optie `-i` is nodig voor gitpod) 
 
 ```
 heroku git:remote -a <app-name>
