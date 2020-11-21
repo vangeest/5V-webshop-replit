@@ -26,7 +26,6 @@ const getProducts = (request, response) => {
   const category_id = parseInt(request.query.category)
   var query = 'SELECT * FROM products ORDER BY id ASC'
   var params = []
-  console.log(`category_id: ${category_id}`)
   if(category_id > 0){
     query = 'SELECT * FROM products WHERE category_id = $1 ORDER BY id ASC'
     params = [ category_id]
