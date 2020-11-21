@@ -12,11 +12,14 @@ https://expressjs.com/en/starter/static-files.html
 https://www.w3schools.com
 * basic sql course\
 https://www.khanacademy.org/computing/computer-programming/sql
+* postgres (database) documentatie\
+https://node-postgres.com/
 * shoppping basket lokaal opslaan\
 google op local storage javascript basket
 * bestelling mailen\
 heroku specifieke oplossing, zie aldaar\
 generieke uitleg vind je hier: https://youtu.be/Va9UKGs1bwI
+
 
 ## over de tools
 * gitpod online editor en hosting ontwikkelomgeving\
