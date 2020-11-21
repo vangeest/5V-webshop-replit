@@ -18,6 +18,7 @@ app.get('/', (_request, response) => {
 
 app.get('/api/products', db.getProducts)
 app.get('/api/products/:id', db.getProductById)
+app.get('/api/products/:id/related', db.getRelatedProductsById)
 // our API is not protected...so let's not expose these
 // app.post('/api/products', db.createProduct)
 // app.put('/api/products/:id', db.updateProduct)
