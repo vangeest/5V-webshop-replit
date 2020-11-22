@@ -38,6 +38,17 @@ const getProducts = (request, response) => {
   })
 }
 
+const getCategories = (_request, response) => {
+  // TODO: change query to make it return categories
+  pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+
 const getProductsByIds = (ids, callback) => {
   pool.query(
     'SELECT * FROM products WHERE id = ANY($1::int[])',
@@ -108,6 +119,7 @@ const deleteProduct = (request, response) => {
 }
 
 module.exports = {
+  getCategories,
   getProducts,
   getProductById,
   createProduct,

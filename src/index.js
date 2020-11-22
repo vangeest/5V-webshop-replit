@@ -16,6 +16,7 @@ app.get('/', (_request, response) => {
   response.redirect('index.html');
 })
 
+app.get('/api/categories', db.getCategories)
 app.get('/api/products', db.getProducts)
 app.get('/api/products/:id', db.getProductById)
 app.get('/api/products/:id/related', db.getRelatedProductsById)
