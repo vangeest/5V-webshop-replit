@@ -32,9 +32,11 @@ const getProducts = (request, response) => {
   }
   pool.query(query, params, (error, results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(200).json(results.rows)
     }
-    response.status(200).json(results.rows)
   })
 }
 
@@ -42,9 +44,11 @@ const getCategories = (_request, response) => {
   // TODO: change query to make it return categories
   pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(200).json(results.rows)
     }
-    response.status(200).json(results.rows)
   })
 }
 
@@ -62,9 +66,11 @@ const getProductById = (request, response) => {
   const id = parseInt(request.params.id)
   pool.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(200).json(results.rows[0])
     }
-    response.status(200).json(results.rows[0])
   })
 }
 
@@ -74,9 +80,11 @@ const getRelatedProductsById = (request, response) => {
   // it now return an array with the current products
   pool.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(200).json(results.rows)
     }
-    response.status(200).json(results.rows)
   })
 }
 
@@ -85,9 +93,11 @@ const createProduct = (request, response) => {
 
   pool.query('INSERT INTO products (name, email) VALUES ($1, $2)', [name, email], (error, _results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(201).json(`Product added with ID: ${result.insertId}`)
     }
-    response.status(201).send(`Product added with ID: ${result.insertId}`)
   })
 }
 
@@ -95,14 +105,17 @@ const updateProduct = (request, response) => {
   const id = parseInt(request.params.id)
   const { name, email } = request.body
 
+  // Note: query is not correct
   pool.query(
     'UPDATE products SET name = $1, email = $2 WHERE id = $3',
     [name, email, id],
     (error, _results) => {
       if (error) {
-        throw error
+        console.log(error)
+        response.status(500).json("oops")
+      } else {
+        response.status(200).send(`Product modified with ID: ${id}`)
       }
-      response.status(200).send(`Product modified with ID: ${id}`)
     }
   )
 }
@@ -112,9 +125,11 @@ const deleteProduct = (request, response) => {
 
   pool.query('DELETE FROM products WHERE id = $1', [id], (error, _results) => {
     if (error) {
-      throw error
+      console.log(error)
+      response.status(500).json("oops")
+    } else {
+      response.status(200).send(`Product deleted with ID: ${id}`)
     }
-    response.status(200).send(`Product deleted with ID: ${id}`)
   })
 }
 
