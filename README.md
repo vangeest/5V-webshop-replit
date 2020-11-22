@@ -114,27 +114,33 @@ heroku login -i
 heroku git:remote -a <app-name>
 ```
 
-## Notes
+# Handige commando's
 
-### Testing checkout
+## start webserver 
+
+.. als ie bijvoorbeeld gecrashed is..
 
 ```
-curl --location --request POST 'https://<workspace>.gitpod.io/api/checkout' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'firstName=Robert' \
---data-urlencode 'lastName=Bakker' \
---data-urlencode 'email=robert@bakkerfamily.net' \
---data-urlencode 'articles=1' \
---data-urlencode 'articles=2' \
---data-urlencode 'articles=3'
+start_web
 ```
-### posting data 
+## Sql opnieuw in database laden
+
+.. als je de sql bestanden aangepast hebt..
+
+```
+reset_db
+```
+
+
+# Notes
+
+## posting data 
 
 onze backend code kan alleen 'x-www-form-urlencoded' aan, voor 'multipart/form-data' default Form-data format moeten we de 'formidable' lib gebruiken 
 (https://www.npmjs.com/package/formidable)
 
 
-### Random images maken
+## Random images maken
 
 ```
 count=1
@@ -146,11 +152,16 @@ do
 done
 ```
 
-## TODO
+
+# TODO
 
 - [X] deploy to heroku
 - [X] serve static files
 - [x] add some rest calls
-- [ ] more complex model
+- [x] more complex model
 - [x] documentation for students
 - [x] automate/optimize heroko deploy
+
+# Credits
+
+-  Robert Bakker [Notalifeform](https://www.gihub.com/Notalifeform)

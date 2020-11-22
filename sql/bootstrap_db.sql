@@ -1,3 +1,4 @@
-create database shop;
-create user api with encrypted password 'apipass';
-grant all privileges on database shop to api;
+DROP DATABASE IF EXISTS shop; 
+CREATE DATABASE shop;
+CREATE user api WITH ENCRYPTED PASSWORD 'apipass';
+GRANT all privileges ON DATABASE shop TO api;
