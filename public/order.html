@@ -1,76 +1,93 @@
 <html>
   </head>
-    <!-- add css link-->
-        <script>
-
-    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="index.html">Artikelen</a></li>
-        <li><a href="basket.html">Winkelwagen <span class="num_products"></span></a></a></li>
-        <li class="active"><a href="order.html">Kassa</a></li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Shop</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Artikelen</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Kassa<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <a href="basket.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Winkelwagen <span class="num_products"></span></button></a>
+      </div>
     </nav>
     <main>
-      <h1>Bestellen</h1>
-      <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
-      <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
-
-      <p>vul je adresgegevens in<p>
-      <form id="orderForm">
-       <table id="index">
-      </table>
-        <div>
-          <div>Voornaam<div>
-          <div>
+      <div class="container">
+        <h5>Bestellen</h5>
+        <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
+        <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
+        <form id="orderForm">
+        <table class="table" id="index">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Naam</th>
+              <th scope="col">Aantal</th>
+              <th scope="col">Prijs</th>
+            </tr>
+          </thead>
+        </table>
+          <h4>Vul hieronder je adresgegevens in</h4>
+          <div class="form-group">
+            <label>Voornaam</label>
+              <input required
+                     class="form-control"
+                     name="firstName" 
+                     placeholder="Voornaam" 
+                     oninvalid="this.setCustomValidity('Voornaam is verplicht')" 
+                     onchange="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="firstName">Achternaam</label>
             <input required 
-                   name="firstName" 
-                   placeholder="Voornaam" 
-                   oninvalid="this.setCustomValidity('Voornaam is verplicht')" 
+                   class="form-control"
+                   name="lastName" 
+                   placeholder="Achternaam"
+                   oninvalid="this.setCustomValidity('Archternaam is verplicht')" 
+                   onchange="this.setCustomValidity('')">
+            
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input required
+                   class="form-control"
+                   type="email" 
+                   name="email" 
+                   placeholder="user@example.com"
+                   oninvalid="this.setCustomValidity('Geen geldig email adres opgegeven')" 
                    onchange="this.setCustomValidity('')">
           </div>
-        </div>
-        <div>
-          <div>Achternaam<div>
-          <div><input required 
-                      name="lastName" 
-                      placeholder="Achternaam"
-                      oninvalid="this.setCustomValidity('Archternaam is verplicht')" 
-                      onchange="this.setCustomValidity('')">
+          <div>
+            <label for="phone">Mobiel</label>
+            <input required 
+                   class="form-control"
+                   type="tel" 
+                   name="phone" 
+                   placeholder="06123456789" 
+                   pattern="^\(?([+]31|0031|0)-?6(\s?|-)([0-9]\s{0,3}){8}$"
+                   oninvalid="this.setCustomValidity('Geen geldig mobiel nummer opgegeven')" 
+                   onchange="this.setCustomValidity('')">
           </div>
-        </div>
-        <div>
-          <div>Email<div>
-          <div><input required 
-                      type="email" 
-                      name="email" 
-                      placeholder="user@example.com"
-                      oninvalid="this.setCustomValidity('Geen geldig email adres opgegeven')" 
-                      onchange="this.setCustomValidity('')">
-          </div>
-        </div>
-        <div>
-          <div>Mobiel<div>
-          <div><input required 
-                      type="tel" 
-                      name="phone" 
-                      placeholder="06123456789" 
-                      pattern="^\(?([+]31|0031|0)-?6(\s?|-)([0-9]\s{0,3}){8}$"
-                      oninvalid="this.setCustomValidity('Geen geldig mobiel nummer opgegeven')" 
-                      onchange="this.setCustomValidity('')">
-          </div>
-        </div>
 
-        <p>klik op bestellen<p>
-        <!--sent a mail with all the info, maybe put it in the database as well-->
-        <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie.<p>
-        <p>Zodra je betaald hebt, stuur ik de spullen op.</p>
-        <button type="button" onclick="checkout()">Bestellen</button>
-      </form>
+          <p>...en klik op bestellen<p>
+          <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie. Zodra je betaald hebt, stuur ik de spullen op.</p>
+          <button type="button" onclick="checkout()">Bestellen</button>
+        </form>
 
-      <p id="resp"></p>
+        <p id="resp"></p>
+      </div>
     </main>
     <footer>
       <hr>

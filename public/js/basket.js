@@ -14,7 +14,8 @@ function getChild(el, qry) {
 function removeClosestCompletelyFromBasket(el){
   const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
   removeCompletelyFromBasket(product)
-  el.parentNode.remove()
+  // hm..hacky
+  el.parentNode.parentNode.remove()
 }
 
 function removeAmountClosestFromBasket(el, showDivQry){

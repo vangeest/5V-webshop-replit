@@ -1,0 +1,63 @@
+.toast {
+    /* dirty: below 'card' button  */
+    position: fixed; 
+    top: 50px; 
+    right: 0; 
+    z-index:1
+}
+
+.card {
+  width:200px; 
+  height: 700px; 
+  margin-bottom: 20px
+}
+
+.product{
+  width: 80%; 
+  height: inherit; 
+  margin-bottom: 20px;
+   margin-top: 20px;
+}
+
+.product img {
+    margin: auto;
+    margin-top: 20px;
+}
+
+.product > .card-header {
+    height:3em
+}
+.card-text {
+  height:10em
+}
+.product-properties {
+  list-style: none; 
+  padding-left: 5px; 
+  font-size: 15px"
+}
+
+.product-properties > li > .property-name {
+  display: inline-block;
+  width: 50px;
+}
+.product_amount {
+  width: 80px
+}
+
+.shop-button {
+  font-size: 10px;
+  margin-top: -4px;
+}
+
+.card-header {
+  height: 5em;
+}
+
+.article-container {
+  margin: auto;
+}
+
+footer {
+  margin: 20;
+  font-size: 10;
+} 
