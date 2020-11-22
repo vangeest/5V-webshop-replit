@@ -7,6 +7,10 @@ function getClosest(el, qry) {
   return parent.querySelector(qry)
 }
 
+function getChild(el, qry) {
+  return el.querySelector(qry)
+}
+
 function removeClosestCompletelyFromBasket(el){
   const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
   removeCompletelyFromBasket(product)
@@ -25,6 +29,12 @@ function addAmountClosestToBasket(el, showDivQry){
   const product = JSON.parse(getClosest(el, '.product_id').dataset.json)
   const showEl = getClosest(el, showDivQry)
   addToBasket(product , amount, showEl)
+}
+
+function openArticlePage(el) {
+  const product_id = getChild(el, '.product_id').value
+  console.log(getClosest(el, '.product_id'))
+  window.location = `/product.html?productId=${product_id}`
 }
 
 function emptyBasket() {

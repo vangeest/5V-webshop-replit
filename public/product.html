@@ -10,10 +10,6 @@
       </ul>
     </nav>
     <main id="index">
-      <h1>Artikelen</h1>
-      <p>Hier zie je een lijst met artikelen die je bij mij kunt bestellen.</p>
-      <p>klik op een artikel voor meer informatie<p>
-      <p>klik op de "plus" om het artikel in je winkelwagen te stoppen</p>
     </main>
     <footer>
       <hr>
@@ -21,15 +17,17 @@
     </footer>
     <!-- template for product info-->
     <template id="productcard">
-      <div class="card" onclick="openArticlePage(this)">
-        <h1 class="product_title"></h1>
+      <div class="card">
+        <div style="display: flex; justify-content: space-beteen;">
+        <h1 syle="display: inline-block"><a href="/index.html">Artikelen</a>&nbsp;&gt;&nbsp;</h1><h1 class="product_title"></h1>
+        </div>
         <p class="product_description"></p>
         <img class="product_image">
         <div class="product_price">€</div>
         <div class="product_code"></div>
         <input class="product_amount" type="number" value="1" min="1">
         <input class="product_id" type="hidden" name="id" data-json="">
-        <button onclick="event.stopPropagation();addAmountClosestToBasket(this);">🛒</button>
+        <button onClick="event.stopPropagation();addAmountClosestToBasket(this);">🛒</button>
       </div>
     </template> 
     <script src="/js/basket.js"></script>
@@ -45,15 +43,16 @@
 
         app.appendChild(container)
 
-        var request = new XMLHttpRequest()
-        request.open('GET', '/api/products', true)
-        request.onload = function () {
-            var data = JSON.parse(this.response)
-            if (request.status >= 200 && request.status < 400) {
-              data.forEach((product) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId');
 
+        var request = new XMLHttpRequest()
+        request.open('GET', `/api/products/${productId}`, true)
+        request.onload = function () {
+            var product = JSON.parse(this.response)
+            if (request.status >= 200 && request.status < 400) {
                 const clone = template.content.cloneNode(true);
-                clone.querySelector(".product_title").textContent = product.name
+                clone.querySelector(".product_title").textContent += product.name
                 clone.querySelector(".product_description").textContent =`${product.description}...`
                 clone.querySelector(".product_price").textContent += product.price
                 clone.querySelector(".product_code").textContent = product.code
@@ -62,8 +61,6 @@
                 clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
 
                 container.appendChild(clone)
-
-                })
             } else {
               const errorMessage = document.createElement('marquee')
               errorMessage.textContent = `Gah, it's not working!`
