@@ -7,6 +7,12 @@ via userinterface: intall packages sqlite3
 put sql comands to build database in sql/main.sql
 push run to gegenate database and save it in sqlite.db
 
+when using language sqlite in replit, you get the sqlite3 command,
+but you have to do npm install express and all other packages
+and the run command doesnt work
+when using the language nodejs, the sqlite3 command doesnt work
+ 
+
 
 
 

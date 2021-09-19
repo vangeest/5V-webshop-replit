@@ -1,2 +1,2 @@
-language = "sqlite3"
+language = "sqlite"
 run = "sqlite3 < main.sql && cd src && node index.js"
