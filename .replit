@@ -1,2 +1,2 @@
 language = "nodejs"
-run = "main.sql"
+run = "cd src && node index.js"
