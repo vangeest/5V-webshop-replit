@@ -1,3 +1,38 @@
+[Run on Repl.it](https://replit.com/github/vangeest/webshop-replit-example)
+
+# Replit
+replit language="bash", because bash has sqlite3 and node installed. 
+
+Disadvantage of bash-repl: you have to install all packages that you use in node manually, while replit does this automatically when you use language nodejs, but this only is needed one time in de replit-shell because after that a packages.lock file is created that is used by replit
+
+## start.sh
+
+
+## package.json
+
+add packages that are being used in node
+
+nmp install (1 time)
+
+
+# NodeJS-simple-example
+Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap
+
+demo on ReplIt:
+https://repl.it/@avs123/Node-inventory-list-simple-example
+
+Installation:
+- clone repository or download zip
+Run next commands:
+- npm install
+- node index.js
+
+
+# credits
+avs123a for using https://github.com/avs123a/NodeJS-simple-example
+notaliform for help almost 24x7 with many questions and problems
+
+
 # gitpodnode
 
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Notalifeform/gitpodnode)

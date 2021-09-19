@@ -1,4 +1,0 @@
-DROP DATABASE IF EXISTS shop; 
-CREATE DATABASE shop;
-CREATE user api WITH ENCRYPTED PASSWORD 'apipass';
-GRANT all privileges ON DATABASE shop TO api;
