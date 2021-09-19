@@ -1,5 +1,11 @@
-const Pool = require('pg').Pool
 
+
+// change from postgress to sqlite3
+//const Pool = require('pg').Pool
+const sqlite3 = require('sqlite3').verbose(); // see https://github.com/mapbox/node-sqlite3/wiki for advanced documentation
+const db = new sqlite3.Database('../db/my.db');
+
+/*
 // development credential
 let connectionString = {
   user: 'api',
@@ -18,11 +24,13 @@ if(process.env.GITPOD_WORKSPACE_ID === undefined) {
     }
   };
 } 
-
+*/
+/*
 const pool = new Pool(connectionString);
 pool.on('connect', () => console.log('connected to db'));
-
+*/
 const getProducts = (request, response) => {
+  console.log("getProducts called")
   const category_id = parseInt(request.query.category)
   var query = 'SELECT * FROM products ORDER BY id ASC'
   var params = []
@@ -30,7 +38,7 @@ const getProducts = (request, response) => {
     query = 'SELECT * FROM products WHERE category_id = $1 ORDER BY id ASC'
     params = [ category_id]
   }
-  pool.query(query, params, (error, results) => {
+  db.all(query, params, (error, results) => {
     if (error) {
       console.log(error)
       response.status(500).json("oops")
@@ -39,7 +47,7 @@ const getProducts = (request, response) => {
     }
   })
 }
-
+/*
 const getCategories = (_request, response) => {
   // TODO: change query to make it return categories
   pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
@@ -143,3 +151,8 @@ module.exports = {
   getProductsByIds,
   getRelatedProductsById
 }
+*/
+module.exports = {
+  getProducts
+}
+
