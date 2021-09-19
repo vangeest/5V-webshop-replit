@@ -1,3 +1,16 @@
+#replit
+replit.com/github/emmauscollege/5V-webshop-template
+run = "cd sql && sqlite3 < main.sql && cd ../src && nodejs index.js"
+run command is saved automatically in .replit
+via userinterface: intall packages sqlite3
+--
+put sql comands to build database in sql/main.sql
+push run to gegenate database and save it in sqlite.db
+
+
+
+
+
 # gitpodnode
 
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Notalifeform/gitpodnode)
