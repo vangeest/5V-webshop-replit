@@ -35,29 +35,9 @@ This file is executed everytime you click on "Run" in replit. What it does is:
 2. (re) create the databasefile db/my.db
 3. start the server for the api en webpages
 
+# Documentation
 
-# NodeJS-simple-example
-Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap
-
-demo on ReplIt:
-https://repl.it/@avs123/Node-inventory-list-simple-example
-
-Installation:
-- clone repository or download zip
-Run next commands:
-- npm install
-- node index.js
-
-
-# credits
-- avs123a\
-for a "Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap". See https://github.com/avs123a/NodeJS-simple-example
-- Robert Bakker [Notalifeform](https://www.gihub.com/Notalifeform)\
-for help almost 24x7 with many questions and problems and providing basic shop called gitpodnode to be further developed by students on gitpod and deplyed freely on heroku. See https://gitpod.io/#https://github.com/Notalifeform/gitpodnode
-
-
-# meer technische info 
-## over de code
+## Code
 * tutorial building a REST-api with postgressDB + jsnode + jsexpress\
 https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
 * serving static files with jsexpress\
@@ -75,7 +55,7 @@ heroku specifieke oplossing, zie aldaar\
 generieke uitleg vind je hier: https://youtu.be/Va9UKGs1bwI
 
 
-## over de tools
+## Tools
 * gitpod online editor en hosting ontwikkelomgeving\
 https://www.gitpod.io/docs/
 * introdution to docker (kennis alleen nodig als je de repo heftig wilt aanpassen)\
@@ -119,4 +99,12 @@ do
  wget -O $count.jpg https://picsum.photos/200/300
 done
 ```
+# credits
+- avs123a\
+for a "Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap". See https://github.com/avs123a/NodeJS-simple-example
+- Robert Bakker [Notalifeform](https://www.gihub.com/Notalifeform)\
+for help almost 24x7 with many questions and problems and providing basic shop called gitpodnode to be further developed by students on gitpod and deplyed freely on heroku. See https://gitpod.io/#https://github.com/Notalifeform/gitpodnode
+
+
+
 
