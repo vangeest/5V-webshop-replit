@@ -1,18 +1,39 @@
 [Run on Repl.it](https://replit.com/github/vangeest/webshop-replit-example)
 
-# Replit
-replit language="bash", because bash has sqlite3 and node installed. 
+# TODO
+- [ ] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
+- [ ] replace npm by yarn
+- [ ] speed up time it takes to "run", maybe by checking if packages changes before re-installing and by checking of sql file was changed before rebuilding database 
 
-Disadvantage of bash-repl: you have to install all packages that you use in node manually, while replit does this automatically when you use language nodejs, but this only is needed one time in de replit-shell because after that a packages.lock file is created that is used by replit
+# Basic explanation of how the webshop works
+The basic idea is that a webpage of the shop is loaded by the browser and information on the articles in the shop are added to that depending on what the user selects.
+1. You open a browser and navigate to the webshop. 
+2. The browser downloads the html en css files from the server. It also downloads a piece of javascript code.
+3. The javascript code is being executed by the browser. The javascript code connects to a link on the server that is connected to the api. This is called a REST-interface. Through the REST interface, the javascript code in the browser request information on the articles it needs to display.
+4. The api is a programm on the server which connects to the database. It requests information from the database and sends it back to the browser. The result is sent in json-format.
+5. The javascript programm in the browser looks at the json-file and add's elements containing articels in the shop to the DOM. The DOM is the model of the html files that the browser keeps in it memory and shows to the user. These elements added are displayed by the browser.
+
+An alternative approach would be to have the server build complete web-pages including all information on articles. This is the idea behind the php programming language. The REST-interface is gaining popularity. An advantage of REST above php is that REST allows for more responsive (interfactive) websites.
+
+# Explanation of files and folders
+
+## db folder
+Database with information on the arcticles in the shop
+
+## web folder
+Static (non changing) html, css en js files.
+
+## api folder
+js files which are being executed on the server when the api is called
+
+## .replit
+We use a bash-repl (language="bash" in .replit file), because bash has sqlite3 and nodejs installed. Downside of bash-repl: The nodejs-repl installs packages automatically by scanning your code. In the bash-repl we have to maintain dependencies in a packages file manually. 
 
 ## start.sh
-
-
-## package.json
-
-add packages that are being used in node
-
-nmp install (1 time)
+This file is executed everytime you click on "Run" in replit. What it does is:
+1. (re)install packages using the package.json file
+2. (re) create the databasefile db/my.db
+3. start the server for the api en webpages
 
 
 # NodeJS-simple-example
@@ -29,13 +50,11 @@ Run next commands:
 
 
 # credits
-avs123a for using https://github.com/avs123a/NodeJS-simple-example
-notaliform for help almost 24x7 with many questions and problems
+- avs123a\
+for a "Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap". See https://github.com/avs123a/NodeJS-simple-example
+- Robert Bakker [Notalifeform](https://www.gihub.com/Notalifeform)\
+for help almost 24x7 with many questions and problems and providing basic shop called gitpodnode to be further developed by students on gitpod and deplyed freely on heroku. See https://gitpod.io/#https://github.com/Notalifeform/gitpodnode
 
-
-# gitpodnode
-
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Notalifeform/gitpodnode)
 
 # meer technische info 
 ## over de code
@@ -67,48 +86,9 @@ https://yarnpkg.com/getting-started
 https://devcenter.heroku.com/
 
 
+# Notes
 
-# Je shop op Heroku draaien
-
-## Setup (alleen de 1e keer)
-
-### login op Heruko
-
-```
-heroku login -i
-```
-
-(note: de optie `-i` is nodig voor gitpod) 
-
-### Maak Heroku app
-
-verzin een leuke naam, bv funkywebshop
-
-```
-heroku create funkywebshop
-```
-
-onthoudt de naam van je app (bv `funkywebshop)
-
-het domein wordt dan (https://funkywebshop.herokuapp.com/)
-
-### Maak een database
-
-```
-heroku addons:create heroku-postgresql:hobby-dev
-```
-
-### Kopieer je database naar Heroku
-
-vanaf de project root (/workspace/project-name)\
-project-name is de naam van je repo
-
-```
- cd /workspace/<project-name>
- yarn push:db <app-name>
-```
-
-### Zet je mail configuratie
+## Zet je mail configuratie
 
 Je krijgt een email account en wachtwoord 
 
@@ -121,53 +101,6 @@ heroku config:set ORDER_MAIL_TO=<jouw email waar je orders ontvangt>
 Dit maakt environment variables in heroku. In gitpod doe je dit met `export  <naam>=<waarde>`  - mailen vanuit gitpod gaat niet, omdat de poort daarvoor geblocked is. 
 
 
-
-### Push de code naar heroku
-
-```
-git push heroku
-```
-
- of gebruik de gitpiod editor (source control> ... > push to > heroku)
-
-### Zet aantal heroku workers naar 1
-
-```
-heroku ps:scale web=1
-```
-
-## Link bestaande app aan Heroku
-Deze commando's run je iedere keer nadat je gitpod opnieuw opstart.
-
-```
-heroku login -i
-```
-
-(note: de optie `-i` is nodig voor gitpod) 
-
-```
-heroku git:remote -a <app-name>
-```
-
-# Handige commando's
-
-## start webserver 
-
-.. als ie bijvoorbeeld gecrashed is..
-
-```
-start_web
-```
-## Sql opnieuw in database laden
-
-.. als je de sql bestanden aangepast hebt..
-
-```
-reset_db
-```
-
-
-# Notes
 
 ## posting data 
 
@@ -187,16 +120,3 @@ do
 done
 ```
 
-
-# TODO
-
-- [X] deploy to heroku
-- [X] serve static files
-- [x] add some rest calls
-- [x] more complex model
-- [x] documentation for students
-- [x] automate/optimize heroko deploy
-
-# Credits
-
--  Robert Bakker [Notalifeform](https://www.gihub.com/Notalifeform)
