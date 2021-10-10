@@ -19,13 +19,8 @@ app.use(
   })
 )
 
-//const checkout = require('./checkout.js')
-
-
-//app.get('/', (_request, response) => {
-//  response.redirect('index.html');
-//})
-
+// definieer startpunten voor de api-server
+app.get('/api/echo', echoRequest)
 //app.get('/api/categories', db.getCategories)
 app.get('/api/products', getProducts)
 //app.get('/api/products/:id', db.getProductById)
@@ -36,12 +31,22 @@ app.get('/api/products', getProducts)
 // app.delete('/api/products/:id', db.deleteProduct)
 //app.post('/api/checkout', checkout.checkoutOrder)
 
-// serve static files
+// defineer startpunt voor statische bestanden
 app.use(express.static('../web'))
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`)
-})
+// start de server!
+app.listen(port, serverIsGestart)
+
+function serverIsGestart() {
+  console.log(`De server is opgestart en is bereikbaar op poort ${port}`)
+}
+
+
+// stuurt de variabelen uit het request
+// terug naar de browser en in de console
+function echoRequest(request, response) {
+  response.status(200).send(request.query)
+}
 
 
 /*
