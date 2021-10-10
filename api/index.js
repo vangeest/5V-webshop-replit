@@ -1,13 +1,13 @@
 // database setup, we use sqlite because it is basic
 // for advanced documentation see 
 // https://github.com/mapbox/node-sqlite3/wiki
-const sqlite3 = require('sqlite3').verbose(); 
+const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../db/my.db');
 
 // server, we use express because that is the most common package
 // for advanced documentation see 
 // see https://expressjs.com 
-const express = require('express') 
+const express = require('express')
 const app = express()
 const port = 3000;
 
@@ -65,7 +65,7 @@ function getProducts(request, response) {
   const category_id = parseInt(request.query.category)
   var query = ''
   var params = []
-  if(category_id > 0){
+  if (category_id > 0) {
     query = 'SELECT * FROM products WHERE category_id = $1 ORDER BY id ASC'
     params = [category_id]
   } else {
@@ -80,15 +80,6 @@ function getProducts(request, response) {
 /*
 
 
-
-const getProductsByIds = (ids, callback) => {
-  pool.query(
-    'SELECT * FROM products WHERE id = ANY($1::int[])',
-    [ids],  // array of query arguments
-    function(_err, result) {
-      callback(result.rows)
-    })
-};
 
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id)
@@ -169,7 +160,7 @@ const deleteProduct = (request, response) => {
 // verwerkt output van een SELECT-query en
 // stuurt dat terug met de meegegeven response-parameter
 function stuurZoekResultaat(response) {
-  function returnFunction (error, data) {
+  function returnFunction(error, data) {
     if (error == null) {    // alles ging goed
       console.log('API heeft resultaat terug gestuurd')
       // console.log(JSON.stringify(data, null, 2))
@@ -188,56 +179,71 @@ function stuurZoekResultaat(response) {
 // checkout and email order
 // ---------------------------------
 
-function checkoutOrder(request, response)  {
+
+
+function getProductsByIds(ids, callback) {
+  db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
+    [ids], // array of query arguments
+    function (_err, result) {
+      callback(result.rows)
+    })
+};
+
+
+function checkoutOrder(request, response) {
 
   var { firstName, lastName, email, phone, articles } = request.body
 
 
   articles = articles || []
-  if(!Array.isArray(articles)) {
-    articles = [ articles ]
+  if (!Array.isArray(articles)) {
+    articles = [articles]
   }
   var basket = {}
-  articles.forEach( id => {
-    basket[id]= request.body[`item_${id}`]
+  articles.forEach(id => {
+    basket[id] = request.body[`item_${id}`]
   })
 
-// order id: date + random number
-var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-var today  = new Date();
-const orderID = String(today.valueOf())+String(Math.floor(Math.random()*1000))
+  // order id: date + random number
+  var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  var today = new Date();
+  const orderId = String(today.valueOf()) + String(Math.floor(Math.random() * 1000))
 
-console.log(today.toLocaleDateString("en-US", options)); 
+ // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
+ //   articles, // array of query arguments
+ // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
+   db.all('SELECT * FROM products WHERE id = 1',
+    [], // array of query arguments
+    (err, rows) => {
+      // process rows here    
 
-  db.getProductsByIds(articles, function(rows){
-    
-    var products = {}
-    rows.forEach (p => products[p.id] = p)
+      var products = {}
+      rows.forEach(p => products[p.id] = p)
 
-    var total = 0;
-    for (let id in basket) {
-      total += basket[id]*products[id].price
-    }
-    var articleTable = "<table>"
-    articleTable += "<tr><th>Code</th><th>Naam</th><th>Aantal</th><th>Prijs</th></tr>"
-    Object.values(products).forEach( p => {
-      articleTable += `<tr><td>${p.code}</td><td>${p.name}</td><td>${basket[p.id]}</td><td>€${p.price}</td></tr>`
+      var total = 0;
+      for (let id in basket) {
+        total += basket[id] * products[id].price
+      }
+      var articleTable = "<table>"
+      articleTable += "<tr><th>Code</th><th>Naam</th><th>Aantal</th><th>Prijs</th></tr>"
+      Object.values(products).forEach(p => {
+        articleTable += `<tr><td>${p.code}</td><td>${p.name}</td><td>${basket[p.id]}</td><td>€${p.price}</td></tr>`
+      })
+      articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
+      articleTable += "</table>"
+
+      var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n` +
+        `Naam: ${firstName || '-'} ${lastName || '-'}<br>\n` +
+        `Email: ${email || '-'}<br>\n` +
+        `Telefoon: ${phone || '-'}<br>\n` +
+        articleTable +
+        `groet,<br><br>\n\nShop Mailer\n</body></html>`
+
+      sendMail('New Order recieved', body)
+      // note: mailer is async, so technically it has not been send yet 
+      response.status(200).send({ orderId })
+
     })
-    articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
-    articleTable += "</table>"
-
-    var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n`+
-   `Naam: ${firstName||'-'} ${lastName||'-'}<br>\n`+
-   `Email: ${email||'-'}<br>\n`+
-   `Telefoon: ${phone||'-'}<br>\n`+
-   articleTable +
-   `groet,<br><br>\n\nShop Mailer\n</body></html>`
-
-  sendMail('New Order recieved', body)
-  // note: mailer is async, so technically it has not been send yet 
-  response.status(200).send({orderId})
-
-  })
 
 
 }
@@ -245,9 +251,9 @@ console.log(today.toLocaleDateString("en-US", options));
 var nodemailer = require('nodemailer');
 
 function mailConfigOK() {
-    return process.env.GMAIL_EMAIL !== undefined && 
-      process.env.GMAIL_PASSWORD !== undefined &&
-      process.env.ORDER_MAIL_TO !== undefined 
+  return process.env.GMAIL_EMAIL !== undefined &&
+    process.env.GMAIL_PASSWORD !== undefined &&
+    process.env.ORDER_MAIL_TO !== undefined
 }
 
 function sendMail(subject, body) {
@@ -258,10 +264,10 @@ function sendMail(subject, body) {
     html: body
   };
 
-  if(!mailConfigOK()) {
+  if (!mailConfigOK()) {
     console.log(`mail not configured properly - dumping mail: ${JSON.stringify(mailOptions)}`)
     return
-  } 
+  }
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -271,12 +277,12 @@ function sendMail(subject, body) {
     }
   });
 
-  transporter.sendMail(mailOptions, function(error, info){
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
       console.log('Email sent: ' + info.response);
     }
   });
-  
+
 } 

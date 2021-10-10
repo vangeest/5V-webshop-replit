@@ -8,6 +8,7 @@ https://www.algolia.com/blog/engineering/implementing-faceted-search-with-dynami
 - [ ] look at parameter transfer<br>
 https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/getAll<br>
 
+- [ ] fix getProductsByIds in index.js (generating error at checkout)
 - [ ] fix email script
 - [ ] implement all api calls needed for a shop
 - [x] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
