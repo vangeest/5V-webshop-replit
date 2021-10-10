@@ -32,7 +32,7 @@ app.get('/api/products', getProducts)
 // app.post('/api/products', createProduct)
 // app.put('/api/products/:id', updateProduct)
 // app.delete('/api/products/:id', deleteProduct)
-//app.post('/api/checkout', checkout.checkoutOrder)
+app.post('/api/checkout', checkoutOrder)
 
 // start de server!
 app.listen(port, serverIsGestart)
@@ -41,6 +41,9 @@ function serverIsGestart() {
   console.log(`De server is opgestart en is bereikbaar op poort ${port}`)
 }
 
+// -----------------------
+// functies die API requests afhandelen
+// -----------------------
 
 // stuurt de variabelen uit het request
 // terug naar de browser en in de console
@@ -72,27 +75,7 @@ function getProducts(request, response) {
   db.all(query, params, stuurZoekResultaat(response))
 }
 
-// ----------------------------------------------------------------------------
-// ---------- voorgegeven functies voor de handigheid -------------------------
-// ----------------------------------------------------------------------------
 
-// verwerkt output van een SELECT-query en
-// stuurt dat terug met de meegegeven response-parameter
-function stuurZoekResultaat(response) {
-  function returnFunction (error, data) {
-    if (error == null) {    // alles ging goed
-      console.log('API heeft resultaat terug gestuurd')
-      // console.log(JSON.stringify(data, null, 2))
-      response.status(200).send(data)
-    }
-    else {                  // er trad een fout op bij de database
-      console.error(`Fout bij opvragen gegevens:` + error)
-      response.status(400).send(error)
-    }
-  }
-
-  return returnFunction;
-}
 
 /*
 
@@ -179,3 +162,121 @@ const deleteProduct = (request, response) => {
 }
 */
 
+// ----------------------------------------------------------------------------
+// hulpfuncties voor afhandelen van API requests
+// ----------------------------------------------------------------------------
+
+// verwerkt output van een SELECT-query en
+// stuurt dat terug met de meegegeven response-parameter
+function stuurZoekResultaat(response) {
+  function returnFunction (error, data) {
+    if (error == null) {    // alles ging goed
+      console.log('API heeft resultaat terug gestuurd')
+      // console.log(JSON.stringify(data, null, 2))
+      response.status(200).send(data)
+    }
+    else {                  // er trad een fout op bij de database
+      console.error(`Fout bij opvragen gegevens:` + error)
+      response.status(400).send(error)
+    }
+  }
+
+  return returnFunction;
+}
+
+// ---------------------------------
+// checkout and email order
+// ---------------------------------
+
+function checkoutOrder(request, response)  {
+
+  var { firstName, lastName, email, phone, articles } = request.body
+
+
+  articles = articles || []
+  if(!Array.isArray(articles)) {
+    articles = [ articles ]
+  }
+  var basket = {}
+  articles.forEach( id => {
+    basket[id]= request.body[`item_${id}`]
+  })
+
+// order id: date + random number
+var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+var today  = new Date();
+const orderID = String(today.valueOf())+String(Math.floor(Math.random()*1000))
+
+console.log(today.toLocaleDateString("en-US", options)); 
+
+  db.getProductsByIds(articles, function(rows){
+    
+    var products = {}
+    rows.forEach (p => products[p.id] = p)
+
+    var total = 0;
+    for (let id in basket) {
+      total += basket[id]*products[id].price
+    }
+    var articleTable = "<table>"
+    articleTable += "<tr><th>Code</th><th>Naam</th><th>Aantal</th><th>Prijs</th></tr>"
+    Object.values(products).forEach( p => {
+      articleTable += `<tr><td>${p.code}</td><td>${p.name}</td><td>${basket[p.id]}</td><td>€${p.price}</td></tr>`
+    })
+    articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
+    articleTable += "</table>"
+
+    var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n`+
+   `Naam: ${firstName||'-'} ${lastName||'-'}<br>\n`+
+   `Email: ${email||'-'}<br>\n`+
+   `Telefoon: ${phone||'-'}<br>\n`+
+   articleTable +
+   `groet,<br><br>\n\nShop Mailer\n</body></html>`
+
+  sendMail('New Order recieved', body)
+  // note: mailer is async, so technically it has not been send yet 
+  response.status(200).send({orderId})
+
+  })
+
+
+}
+
+var nodemailer = require('nodemailer');
+
+function mailConfigOK() {
+    return process.env.GMAIL_EMAIL !== undefined && 
+      process.env.GMAIL_PASSWORD !== undefined &&
+      process.env.ORDER_MAIL_TO !== undefined 
+}
+
+function sendMail(subject, body) {
+  const mailOptions = {
+    from: process.env.GMAIL_EMAIL,
+    to: process.env.ORDER_MAIL_TO,
+    subject: subject,
+    html: body
+  };
+
+  if(!mailConfigOK()) {
+    console.log(`mail not configured properly - dumping mail: ${JSON.stringify(mailOptions)}`)
+    return
+  } 
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_EMAIL,
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
+} 
