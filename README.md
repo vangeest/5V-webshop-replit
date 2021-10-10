@@ -1,7 +1,11 @@
 [Run on Repl.it](https://replit.com/github/vangeest/webshop-replit-example)
 
 # TODO
-- [ ] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
+- [ ] check to implement<br>
+https://medium.com/truepicinc/queryql-easily-add-filtering-sorting-and-pagination-to-your-node-js-rest-api-9222135c93ae
+- [ ] fix email script
+- [ ] implement all api calls needed for a shop
+- [x] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
 - [x] replace npm by yarn => much quicker now
 - [x] speed up time it takes to "run", maybe by checking if packages changes before re-installing and by checking of sql file was changed before rebuilding database => now within 10 seconds thanks to yarn
 
