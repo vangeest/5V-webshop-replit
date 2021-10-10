@@ -2,8 +2,8 @@
 
 # TODO
 - [ ] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
-- [ ] replace npm by yarn
-- [ ] speed up time it takes to "run", maybe by checking if packages changes before re-installing and by checking of sql file was changed before rebuilding database 
+- [x] replace npm by yarn => much quicker now
+- [x] speed up time it takes to "run", maybe by checking if packages changes before re-installing and by checking of sql file was changed before rebuilding database => now within 10 seconds thanks to yarn
 
 # Basic explanation of how the webshop works
 The basic idea is that a webpage of the shop is loaded by the browser and information on the articles in the shop are added to that depending on what the user selects.
