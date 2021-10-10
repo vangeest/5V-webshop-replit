@@ -19,20 +19,20 @@ app.use(
   })
 )
 
-// definieer startpunten voor de api-server
+// defineer startpunt voor statische bestanden
+app.use(express.static('../web'))
+
+// definieer startpunten voor de API-server
 app.get('/api/echo', echoRequest)
 //app.get('/api/categories', db.getCategories)
 app.get('/api/products', getProducts)
 //app.get('/api/products/:id', db.getProductById)
 //app.get('/api/products/:id/related', db.getRelatedProductsById)
 // our API is not protected...so let's not expose these
-// app.post('/api/products', db.createProduct)
-// app.put('/api/products/:id', db.updateProduct)
-// app.delete('/api/products/:id', db.deleteProduct)
+// app.post('/api/products', createProduct)
+// app.put('/api/products/:id', updateProduct)
+// app.delete('/api/products/:id', deleteProduct)
 //app.post('/api/checkout', checkout.checkoutOrder)
-
-// defineer startpunt voor statische bestanden
-app.use(express.static('../web'))
 
 // start de server!
 app.listen(port, serverIsGestart)
@@ -48,30 +48,14 @@ function echoRequest(request, response) {
   response.status(200).send(request.query)
 }
 
+function getCategories(request, response) {
+  // TODO: change query to make it return categories
+  var query = 'SELECT * FROM products ORDER BY id ASC'
+  var params = []
+  db.all(query, params, stuurZoekResultaat(response))
+}
 
 /*
-// development credential
-let connectionString = {
-  user: 'api',
-  database: 'shop',
-  password: 'apipass',
-  host: 'localhost',
-  port: 5432,
-  ssl: false
-};
-
-if(process.env.GITPOD_WORKSPACE_ID === undefined) {
-  connectionString = {
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-  };
-} 
-*/
-/*
-const pool = new Pool(connectionString);
-pool.on('connect', () => console.log('connected to db'));
 */
 function getProducts(request, response) {
   console.log("getProducts called")
@@ -97,7 +81,8 @@ function getProducts(request, response) {
 function stuurZoekResultaat(response) {
   function returnFunction (error, data) {
     if (error == null) {    // alles ging goed
-      console.log(JSON.stringify(data, null, 2))
+      console.log('API heeft resultaat terug gestuurd')
+      // console.log(JSON.stringify(data, null, 2))
       response.status(200).send(data)
     }
     else {                  // er trad een fout op bij de database
@@ -110,17 +95,7 @@ function stuurZoekResultaat(response) {
 }
 
 /*
-const getCategories = (_request, response) => {
-  // TODO: change query to make it return categories
-  pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
-    if (error) {
-      console.log(error)
-      response.status(500).json("oops")
-    } else {
-      response.status(200).json(results.rows)
-    }
-  })
-}
+
 
 
 const getProductsByIds = (ids, callback) => {
