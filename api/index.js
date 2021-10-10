@@ -24,7 +24,7 @@ app.use(express.static('../web'))
 
 // definieer startpunten voor de API-server
 app.get('/api/echo', echoRequest)
-//app.get('/api/categories', db.getCategories)
+app.get('/api/categories', getCategories)
 app.get('/api/products', getProducts)
 //app.get('/api/products/:id', db.getProductById)
 //app.get('/api/products/:id/related', db.getRelatedProductsById)
