@@ -2,7 +2,12 @@
 
 # TODO
 - [ ] check to implement<br>
-https://medium.com/truepicinc/queryql-easily-add-filtering-sorting-and-pagination-to-your-node-js-rest-api-9222135c93ae
+https://medium.com/truepicinc/queryql-easily-add-filtering-sorting-and-pagination-to-your-node-js-rest-api-9222135c93ae<br>
+or look at this for an approach (no code)<br>
+https://www.algolia.com/blog/engineering/implementing-faceted-search-with-dynamic-faceting-with-code/
+- [ ] look at parameter transfer<br>
+https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/getAll<br>
+
 - [ ] fix email script
 - [ ] implement all api calls needed for a shop
 - [x] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
