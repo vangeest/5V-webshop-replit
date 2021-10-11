@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "express": "^4.17.1",
-    "sqlite3": "^5.0.2",
+    "better-sqlite3": "^7.4.3",
     "nodemailer": "^6.6.5"
   },
   "name": "5V-webshop",

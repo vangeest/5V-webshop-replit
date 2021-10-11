@@ -1,6 +1,7 @@
 [Run on Repl.it](https://replit.com/github/vangeest/webshop-replit-example)
 
 # TODO
+- [ ] replace sqlite3 by better-sqlite3
 - [ ] check to implement<br>
 https://medium.com/truepicinc/queryql-easily-add-filtering-sorting-and-pagination-to-your-node-js-rest-api-9222135c93ae<br>
 or look at this for an approach (no code)<br>

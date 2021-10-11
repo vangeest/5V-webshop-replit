@@ -1,8 +1,10 @@
-// database setup, we use sqlite because it is basic
+// database setup, we use better-sqlite3 because it is basic
 // for advanced documentation see 
-// https://github.com/mapbox/node-sqlite3/wiki
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('../db/my.db');
+// https://www.npmjs.com/package/better-sqlite3
+const Database = require('better-sqlite3');
+// all sql-statements will be sent to console for debug purpose
+const db = new Database('../db/my.db', { verbose: console.log }); 
+// onze code negeert errors in sql-commando's maar de database drukt errors af op de console
 
 // server, we use express because that is the most common package
 // for advanced documentation see 
@@ -52,10 +54,13 @@ function echoRequest(request, response) {
 }
 
 function getCategories(request, response) {
+  console.log("getCategories called")
   // TODO: change query to make it return categories
-  var query = 'SELECT * FROM products ORDER BY id ASC'
-  var params = []
-  db.all(query, params, stuurZoekResultaat(response))
+  const sqlOpdracht = db.prepare('SELECT * FROM products ORDER BY id ASC')
+  const data = sqlOpdracht.all()
+  // console.log(JSON.stringify(data, null, 2))
+  response.status(200).send(data)
+  console.log('API heeft resultaat terug gestuurd')
 }
 
 /*
@@ -63,16 +68,17 @@ function getCategories(request, response) {
 function getProducts(request, response) {
   console.log("getProducts called")
   const category_id = parseInt(request.query.category)
-  var query = ''
-  var params = []
+  let data = []
   if (category_id > 0) {
-    query = 'SELECT * FROM products WHERE category_id = $1 ORDER BY id ASC'
-    params = [category_id]
+    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE category_id = ? ORDER BY id ASC')
+    data = sqlOpdracht.all(category_id)
   } else {
-    query = 'SELECT * FROM products ORDER BY id ASC'
-    params = []
+    const sqlOpdracht = db.prepare('SELECT * FROM products ORDER BY id ASC')
+    data = sqlOpdracht.all()
   }
-  db.all(query, params, stuurZoekResultaat(response))
+   // console.log(JSON.stringify(data, null, 2))
+  response.status(200).send(data)
+  console.log('API heeft resultaat terug gestuurd')
 }
 
 
@@ -153,27 +159,6 @@ const deleteProduct = (request, response) => {
 }
 */
 
-// ----------------------------------------------------------------------------
-// hulpfuncties voor afhandelen van API requests
-// ----------------------------------------------------------------------------
-
-// verwerkt output van een SELECT-query en
-// stuurt dat terug met de meegegeven response-parameter
-function stuurZoekResultaat(response) {
-  function returnFunction(error, data) {
-    if (error == null) {    // alles ging goed
-      console.log('API heeft resultaat terug gestuurd')
-      // console.log(JSON.stringify(data, null, 2))
-      response.status(200).send(data)
-    }
-    else {                  // er trad een fout op bij de database
-      console.error(`Fout bij opvragen gegevens:` + error)
-      response.status(400).send(error)
-    }
-  }
-
-  return returnFunction;
-}
 
 // ---------------------------------
 // checkout and email order
@@ -209,10 +194,10 @@ function checkoutOrder(request, response) {
   var today = new Date();
   const orderId = String(today.valueOf()) + String(Math.floor(Math.random() * 1000))
 
- // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
- //   articles, // array of query arguments
- // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
-   db.all('SELECT * FROM products WHERE id = 1',
+  // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
+  //   articles, // array of query arguments
+  // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
+  db.all('SELECT * FROM products WHERE id = 1',
     [], // array of query arguments
     (err, rows) => {
       // process rows here    
