@@ -179,12 +179,14 @@ function getProductsByIds(ids, callback) {
 function checkoutOrder(request, response) {
 
   var { firstName, lastName, email, phone, articles } = request.body
-
-
+ console.log(request.body)
+  
+  // define articles as array of id's of products 
   articles = articles || []
   if (!Array.isArray(articles)) {
     articles = [articles]
   }
+  // define basket containing amount per article
   var basket = {}
   articles.forEach(id => {
     basket[id] = request.body[`item_${id}`]
@@ -198,13 +200,16 @@ function checkoutOrder(request, response) {
   // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
   //   articles, // array of query arguments
   // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
-  db.all('SELECT * FROM products WHERE id = 1',
-    [], // array of query arguments
-    (err, rows) => {
+    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id IN (?) ORDER BY id ASC')
+    data = sqlOpdracht.all(articles)
+    
+    //db.all('SELECT * FROM products WHERE id = 1',
+    //[], // array of query arguments
+    //(err, rows) => {
       // process rows here    
 
       var products = {}
-      rows.forEach(p => products[p.id] = p)
+      data.forEach(p => products[p.id] = p)
 
       var total = 0;
       for (let id in basket) {
@@ -228,9 +233,6 @@ function checkoutOrder(request, response) {
       sendMail('New Order recieved', body)
       // note: mailer is async, so technically it has not been send yet 
       response.status(200).send({ orderId })
-
-    })
-
 
 }
 
