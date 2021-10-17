@@ -95,6 +95,7 @@
               clone.querySelector(".product_price").textContent += product.price
               clone.querySelector(".product_code").textContent = product.code
               clone.querySelector(".product_id").value = product.id
+              debugger
               clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
               clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
 
