@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="nl">
+
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="/css/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -70,47 +71,50 @@
 	</template>
 	<script src="/js/basket.js"></script>
 	<script>
-		(function() {
-        const template = document.querySelector('#productcard');
-        const app = document.getElementById('index')
+   
+    function showProducts() {
+      console.log("showProducts called")
+      const template = document.querySelector('#productcard');
+      const app = document.getElementById('index')
+      
+      const container = document.createElement('div')
+      container.setAttribute('class', 'container row article-container')
+
+      app.appendChild(container)
         
-        updateBasket()
-
-        const container = document.createElement('div')
-        container.setAttribute('class', 'container row article-container')
-
-        app.appendChild(container)
-
-        var request = new XMLHttpRequest()
-        request.open('GET', '/api/products', true)
-        request.onload = function () {
             var data = JSON.parse(this.response)
-            if (request.status >= 200 && request.status < 400) {
-              data.forEach((product) => {
+            for (let row in data) {
+              const product = data[row]
+              const clone = template.content.cloneNode(true);
+              var name = product.name.substr(0, 35)
+              if(name.length < product.name.length) {
+                name = name + '...'
+              }
+              clone.querySelector(".product_title").textContent = name
+              clone.querySelector(".product_description").textContent =`${product.description.substr(0, 100)}...`
+              clone.querySelector(".product_price").textContent += product.price
+              clone.querySelector(".product_code").textContent = product.code
+              clone.querySelector(".product_id").value = product.id
+              clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
+              clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
 
-                const clone = template.content.cloneNode(true);
-                var name = product.name.substr(0, 35)
-                if(name.length < product.name.length) {
-                  name = name + '...'
-                }
-                clone.querySelector(".product_title").textContent = name
-                clone.querySelector(".product_description").textContent =`${product.description.substr(0, 100)}...`
-                clone.querySelector(".product_price").textContent += product.price
-                clone.querySelector(".product_code").textContent = product.code
-                clone.querySelector(".product_id").value = product.id
-                clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
-                clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
-
-                container.appendChild(clone)
-
-                })
-            } else {
-              const errorMessage = document.createElement('marquee')
-              errorMessage.textContent = `Gah, it's not working!`
-              app.appendChild(errorMessage)
+              container.appendChild(clone)
             }
           }
-        request.send()
+
+		(function() {
+        // your page initialization code here
+        // the DOM will be available here
+       
+        // laad winkelmandje
+        updateBasket()
+
+        // laad producten
+        // de functie showProducs wordt aangeroepen als er antwoord van de API is
+        var request = new XMLHttpRequest()
+        request.open('GET', '/api/products', true) 
+        request.onload = showProducts 
+        request.send() 
 
       })();
 	</script>
