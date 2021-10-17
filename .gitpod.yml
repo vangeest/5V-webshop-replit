@@ -1,13 +1,10 @@
-# The Docker image to run your workspace in. Defaults to gitpod/workspace-full
-image:
-  file: .gitpod.Dockerfile
-ports:
-  - port: 3000-3001
-
-# Command to start on workspace startup (optional)
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - init: |
-      psql < sql/bootstrap_db.sql
-      psql --username=api  shop < sql/create_tables.sql
-      psql --username=api  shop < sql/seed.sql
-  - command: cd src && yarn config set script-shell /bin/bash && yarn install && node index.js 
+  - init: echo 'init script' # runs during prebuild
+    command: bash start.sh
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - port: 8080
+    onOpen: open-browser
+    visible: public

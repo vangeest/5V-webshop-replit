@@ -11,7 +11,7 @@ const db = new Database('../db/my.db', { verbose: console.log });
 // see https://expressjs.com 
 const express = require('express')
 const app = express()
-const port = 3000;
+const port = 8080; // standard port for https
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -66,7 +66,8 @@ function getCategories(request, response) {
 /*
 */
 function getProducts(request, response) {
-  console.log("getProducts called")
+  console.log("API ontvangt /api/products/?",request.query)
+  
   const category_id = parseInt(request.query.category)
   let data = []
   if (category_id > 0) {

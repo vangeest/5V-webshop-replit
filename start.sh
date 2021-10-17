@@ -3,9 +3,7 @@ echo this may take some minutes the first time
 yarn install
 
 echo genenating database from create.sql and saving to my.db
-cd db
-sqlite3 my.db < create.sql
-cd ..
+sqlite3 db/my.db < db/create.sql
 
 echo starting api and static webserver
 cd api
