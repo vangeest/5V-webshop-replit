@@ -3,7 +3,7 @@
 // https://www.npmjs.com/package/better-sqlite3
 const Database = require('better-sqlite3');
 // all sql-statements will be sent to console for debug purpose
-const db = new Database('../db/my.db', { verbose: console.log }); 
+const db = new Database('../db/my.db', { verbose: console.log });
 // onze code negeert errors in sql-commando's maar de database drukt errors af op de console
 
 // server, we use express because that is the most common package
@@ -50,24 +50,26 @@ function serverIsGestart() {
 // stuurt de variabelen uit het request
 // terug naar de browser en in de console
 function echoRequest(request, response) {
+  console.log('API ontvangt /api/echo/?', request.query)
   response.status(200).send(request.query)
 }
 
+
 function getCategories(request, response) {
-  console.log("getCategories called")
+  console.log('API ontvangt /api/categories/')
   // TODO: change query to make it return categories
   const sqlOpdracht = db.prepare('SELECT * FROM products ORDER BY id ASC')
   const data = sqlOpdracht.all()
   // console.log(JSON.stringify(data, null, 2))
   response.status(200).send(data)
-  console.log('API heeft resultaat terug gestuurd')
+  console.log('API verstuurt /api/categories/')
 }
 
 /*
 */
 function getProducts(request, response) {
-  console.log("API ontvangt /api/products/?",request.query)
-  
+  console.log('API ontvangt /api/products/?', request.query)
+
   const category_id = parseInt(request.query.category)
   let data = []
   if (category_id > 0) {
@@ -77,17 +79,12 @@ function getProducts(request, response) {
     const sqlOpdracht = db.prepare('SELECT * FROM products ORDER BY id ASC')
     data = sqlOpdracht.all()
   }
-   // console.log(JSON.stringify(data, null, 2))
+  // console.log(JSON.stringify(data, null, 2))
   response.status(200).send(data)
-  console.log('API heeft resultaat terug gestuurd')
+  console.log('API verstuurt /api/products/')
 }
 
-
-
 /*
-
-
-
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id)
   pool.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {
@@ -162,27 +159,17 @@ const deleteProduct = (request, response) => {
 
 
 // ---------------------------------
-// checkout and email order
+// email bestelling
 // ---------------------------------
 
-
-
-function getProductsByIds(ids, callback) {
-  db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
-    [ids], // array of query arguments
-    function (_err, result) {
-      callback(result.rows)
-    })
-};
-
-
 function checkoutOrder(request, response) {
- console.log("API ontvangt /api/checkout2/")
- 
- var { firstName, lastName, email, phone, productIds, productAmounts } = request.body
- console.log("data ontvangen via post-request:")
- console.log(request.body)
+  console.log("API ontvangt /api/checkout/")
   
+  // lees informatie die is meegestuurd naar api via POST-request
+  var { firstName, lastName, email, phone, productIds, productAmounts } = request.body
+  console.log("data ontvangen via post-request:")
+  console.log(request.body)
+
   // define productIds and ProductAmounts as array 
   // if there are 0 or 1 products this code is needed
   productIds = productIds || []
@@ -194,68 +181,45 @@ function checkoutOrder(request, response) {
     productAmounts = [productAmounts]
   }
 
-  // order id: date + random number
-  var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  // order id maken: date + random number
   var today = new Date();
-  const orderId = String(today.valueOf()) + String(Math.floor(Math.random() * 1000))
+  const orderId = today.getFullYear() + '/' + today.getMonth() + '/' + today.getDate() + '-' + String(Math.floor(Math.random() * 1000))
 
-  // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
-  //   articles, // array of query arguments
-  // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
+  // maak tabel met info uit database over producten uit winkelmand
+  var totaalBedrag = 0;
+  var articleTable = "<table>"
+  articleTable += "<tr><th>Id</th><th>Code</th><th>Naam</th><th>Prijs per stuk</th><th>Aantal</th><th>Aantal * prijs</th></tr>"
+  // TODO: check of dit werkt voor 0 producten
+  for (let i = 0; i < productIds.length; i++) {
+    let id = productIds[i]
+    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id = ?')
+    row = sqlOpdracht.get(id)
+    let aantalMaalPrijs = productAmounts[i] * row.price
+    articleTable += `<tr><td>${row.id}<tr><td>${row.code}</td><td>${row.name}</td><td>€ ${row.price.toFixed(2)}</td><td>${productAmounts[i].toFixed(2)}</td><td>€ ${aantalMaalPrijs}</td></tr>`
+    totaalBedrag += aantalMaalPrijs
+  }
+  articleTable += `<tr><td colspan="5">Totaal</td><td>€ ${totaalBedrag.toFixed(2)}</td><tr>`
+  articleTable += "</table>"
+  
+  // maak inhoud van mailbericht
+  var body = `<html><body>Hi<br><br>Bedankt voor je bestelling met nummer <b>${orderId}</b><br><br>\n` +
+    `Naam: ${firstName || '-'} ${lastName || '-'}<br>\n` +
+    `Email: ${email || '-'}<br>\n` +
+    `Telefoon: ${phone || '-'}<br>\n` +
+    articleTable +
+    //`productIds: ${productIds || '-'}<br>\n` + 
+    //`productAmounts: ${productAmounts || '-'}<br>\n` + 
+    `groet,<br><br>\n\nShop Mailer\n</body></html>`
 
-    // create part of query where there is an i for each ?
-    // for security reasons (SQL-injection) it is neccessary to use paramaters in db.prepare
-    let queryParamPlaceholders = ''
-    if (productIds.length > 0) {
-      queryParamPlaceholders = queryParamPlaceholders + '?'
-    }
-    let i = 1;
-    while (i < productIds.length) {
-      queryParamPlaceholders = queryParamPlaceholders + ',?'
-      i = i +1;
-    }
-    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id IN ('+queryParamPlaceholders+') ORDER BY id ASC')
-    data = sqlOpdracht.all(productIds)
-    
-    //db.all('SELECT * FROM products WHERE id = 1',
-    //[], // array of query arguments
-    //(err, rows) => {
-      // process rows here    
-
-      /* productIds gebruiken
-      var products = {}
-      data.forEach(p => products[p.id] = p)
-*/
-     /* totaalbedrag maken met productsAmount 
-      var total = 0;
-      for (let id in basket) {
-        total += basket[id] * products[id].price
-      }
-      */
-      /* voeg artikelen to aan mail,
-      doe iets met een data en een simpel loopje
-      var articleTable = "<table>"
-      articleTable += "<tr><th>Code</th><th>Naam</th><th>Aantal</th><th>Prijs</th></tr>"
-      Object.values(products).forEach(p => {
-        articleTable += `<tr><td>${p.code}</td><td>${p.name}</td><td>${basket[p.id]}</td><td>€${p.price}</td></tr>`
-      })
-      articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
-      articleTable += "</table>"
-*/
-      var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n` +
-        `Naam: ${firstName || '-'} ${lastName || '-'}<br>\n` +
-        `Email: ${email || '-'}<br>\n` +
-        `Telefoon: ${phone || '-'}<br>\n` +
-        //articleTable +
-        `productIds: ${productIds || '-'}<br>\n` + 
-        `productAmounts: ${productAmounts || '-'}<br>\n` + 
-        `groet,<br><br>\n\nShop Mailer\n</body></html>`
-
-      sendMail('New Order recieved', body)
-      // note: mailer is async, so technically it has not been send yet 
-      response.status(200).send({ orderId })
+  sendMail('Bevestiging van bestelling', body, email)
+  // note: mailer is async, so technically it has not been send yet 
+  response.status(200).send({ orderId })
 
 }
+
+// --------------------------
+// sent mail hulp onderdelen
+// --------------------------
 
 var nodemailer = require('nodemailer');
 
@@ -265,10 +229,11 @@ function mailConfigOK() {
     process.env.ORDER_MAIL_TO !== undefined
 }
 
-function sendMail(subject, body) {
+function sendMail(subject, body, recipent) {
   const mailOptions = {
     from: process.env.GMAIL_EMAIL,
-    to: process.env.ORDER_MAIL_TO,
+    to: recipent,
+    bcc: process.env.ORDER_MAIL_TO,
     subject: subject,
     html: body
   };
