@@ -65,6 +65,26 @@ google op local storage javascript basket
 heroku specifieke oplossing, zie aldaar\
 generieke uitleg vind je hier: https://youtu.be/Va9UKGs1bwI
 
+## Zet je mail configuratie in replit
+De shop mailt elke order die geplaatst is.
+Mailen werkt niet in gitpod, omdat de smtp-port dicht staat.
+Mailen door de shop in replit werkt als volgt.
+Zet de environment variabelen (slotje links in replit menu)
+```
+GMAIL_EMAIL=<email account>
+GMAIL_PASSWORD=<email wachtwoord>
+ORDER_MAIL_TO=<jouw email waar je orders ontvangt>
+```
+
+Als je gmail gebruikt zonder tweestapsverificatie:<br>
+Zet in gmail (account->beveiliging) gebruik van minder veilige apps aan
+
+Als je gmail gebruikt met tweestapsverificatie:<br>
+Maak een app-wachtwoord (account->beveiliging) en zet dat in GMAIL_PASSWORD
+
+Test je emailconfiguratie:<br>
+Doe een bestelling en kijk naar de console in replit. 
+De api meldt op de console als mail succesvol is verzonden en geeft een foutmelding als het niet is gelukt.
 
 ## Tools
 * gitpod online editor en hosting ontwikkelomgeving\
@@ -79,7 +99,7 @@ https://devcenter.heroku.com/
 
 # Notes
 
-## Zet je mail configuratie
+## Zet je mail configuratie in heroku
 
 Je krijgt een email account en wachtwoord 
 
