@@ -148,8 +148,8 @@
           clone.querySelector(".product_code").textContent = product.code
           clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
           clone.querySelector(".product_amount_show").textContent = amount             
-          clone.querySelector(".product_id_show").textContent = id             
-          clone.querySelector(".productIds").value = id             
+          clone.querySelector(".product_id_show").textContent = product.id             
+          clone.querySelector(".productIds").value = product.id             
           clone.querySelector(".productAmounts").value = amount             
           container.appendChild(clone)
         }
