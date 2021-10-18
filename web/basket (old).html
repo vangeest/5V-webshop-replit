@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">Shop</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Artikelen</a>
+          </li>
+        </ul>
+        <a href="basket.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Winkelwagen <span class="num_products"></span></button></a>
+      </div>
+    </nav>
+    <main>
+      <div id="index">
+      	<div class="container">
+          <h5>Winkelwagen</h5>
+          <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
+          <p>Door op plus en min te drukken kun je het aantal per artikel aanpassen</p>
+        </div>
+      </div>
+      <div class="container" id="to_checkout">
+        <div>Totaal</div>
+        <div>€<span class="sum_products">0.00</span>
+        <div>Ga naar de <a href="order.html">Kassa</a> om af te rekenen</div>
+      </div>
+    </main>
+    <footer>
+      <hr>
+      <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
+    </footer>
+        <!-- template for product info-->
+    <template id="productrow">
+      <div class="card product product_row">
+        <div class="card-header">
+                <ximg class="product_image" width="30">
+                <span class="product_name"><span>
+        </div>
+        <div class="card-body">
+          <ul class="product-properties">
+            <li><span class="propert-name">Prijs:</span><span class="product_price">€</span></li>
+            <li><span class="propert-name">Code:</span><span class="product_code"></span></li>
+            <li><span class="propert-name">Aantal:</span><span class="product_amount_show"></span></li>
+          </ul>
+          <input class="product_id" type="hidden" name="id" data-json="">
+          <input class="product_amount" type="hidden" value="1">
+          <button class="btn btn-outline-dark shop-button" onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
+          <button class="btn btn-outline-dark shop-button" onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
+          <button class="btn btn-outline-dark shop-button" onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
+        </div>
+      </div>
+    </template>
+    <script src="/js/basket.js"></script>
+    <script>
+        function setIfEmptyMsg() {
+          const basket = readBasket()
+          var numkeys = Object.keys(basket).length
+          if(numkeys == 0) {
+            document.querySelector('.container').setAttribute('class', 'container empty')
+            document.querySelector('.container').textContent = 'je winkelwagen is leeg'
+            document.querySelector('#to_checkout').style.display = "none"
+          }else{
+            document.querySelector('#to_checkout').style.display = "block"
+          }
+        }
+      (function() {
+        // your page initialization code here
+        // the DOM will be available here
+        updateBasket()
+        const template = document.querySelector('#productrow');
+        const app = document.getElementById('index')
+
+        const container = document.createElement('div')
+        container.setAttribute('class', 'container')
+
+        app.appendChild(container)
+        
+        const basket = readBasket()
+
+        function showProduct(product, amount) {
+          const clone = template.content.cloneNode(true);
+          clone.querySelector(".product_name").textContent = product.name
+          clone.querySelector(".product_price").textContent += product.price
+          clone.querySelector(".product_code").textContent = product.code
+          clone.querySelector(".product_id").value = product.id
+          clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
+          clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
+          clone.querySelector(".product_amount_show").textContent = amount             
+          container.appendChild(clone)
+        }
+
+        Object.keys(basket).forEach(id => {
+            showProduct(JSON.parse(localStorage.getItem(`item_${id}`)), basket[id])
+        })
+
+        setIfEmptyMsg()
+
+      })();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+	  </script>
+	  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+	          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+	  </script>
+	  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+	        	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+	  </script>
+  </body>
+</html>

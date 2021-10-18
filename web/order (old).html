@@ -1,46 +1,46 @@
 <!doctype html>
 <html lang="nl">
-
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-	 crossorigin="anonymous">
-	<link rel="stylesheet" href="/css/style.css">
-</head>
-
-<body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="/">Shop</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Shop</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/">Artikelen</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Kassa<span class="sr-only">(current)</span></a>
           </li>
         </ul>
         <a href="basket.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Winkelwagen <span class="num_products"></span></button></a>
       </div>
     </nav>
     <main>
-   
-      <form id="orderForm">
-        <div id="index">
-      	  <div class="container">
-            <h5>Winkelwagen</h5>
-            <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
-            <p>Door op plus en min te drukken kun je het aantal per artikel aanpassen</p>
-          </div>
-        <!-- hier komt de lijst met artikelen -->
-        <!-- die wordt erin gezet door een script dat wordt uitgevoerd zodra de pagina geladen is-->
-        </div>
-        <div class="container" id="to_checkout">
-          <div>Totaal</div>
-          <div>€<span class="sum_products">0.00</span>
-        </div>
-      
+      <div class="container">
+        <h5>Bestellen</h5>
+        <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
+        <!-- add some neat stuff (jQuery?) to get the table from the database using the REST-api we build-->
+        <form id="orderForm">
+        <table class="table" id="index">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Naam</th>
+              <th scope="col">Aantal</th>
+              <th scope="col">Prijs</th>
+            </tr>
+          </thead>
+        </table>
           <h4>Vul hieronder je adresgegevens in</h4>
           <div class="form-group">
             <label>Voornaam</label>
@@ -87,84 +87,32 @@
           <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie. Zodra je betaald hebt, stuur ik de spullen op.</p>
           <button type="button" onclick="checkout()">Bestellen</button>
         </form>
+
+        <p id="resp"></p>
+      </div>
     </main>
     <footer>
       <hr>
       <p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste bijgewerkt 1 oktober 2020.</p>
     </footer>
-        <!-- template for product info-->
     <template id="productrow">
-      <div class="card product product_row">
-        <div class="card-header">
-                <ximg class="product_image" width="30">
-                <span class="product_name"><span>
-        </div>
-        <div class="card-body">
-          <ul class="product-properties">
-            <li><span class="propert-name">Prijs:</span><span class="product_price">€</span></li>
-            <li><span class="propert-name">Code:</span><span class="product_code"></span></li>
-            <li><span class="propert-name">Aantal:</span><span class="product_amount_show"></span></li>
-          </ul>
-          <!-- add type="hidden" to next two lines to hide info-->
-          <input class="product_id" name="productIds" data-json="">
-          <input class="product_amount" name="productAmounts" value="1">
-          <button class="btn btn-outline-dark shop-button" onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
-          <button class="btn btn-outline-dark shop-button" onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
-          <button class="btn btn-outline-dark shop-button" onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
-        </div>
-      </div>
+      <tr>
+        <input class="product_amount_input" type="hidden">
+        <input class="product_id" type="hidden" name="articles" >
+        <td class="product_code" ></td>
+        <td class="product_name"></td>
+        <td class="product_amount"></td>
+        <td class="product_price">€</td>
+      </tr>
     </template>
+    <template id="productsum">
+      <tr>
+        <td colspan="3">Totaal</td>
+        <td class="product_sum">€</td>
+      </tr>
+    </template> 
     <script src="/js/basket.js"></script>
     <script>
-      // script to show basket when page is loaded
-        function setIfEmptyMsg() {
-          const basket = readBasket()
-          var numkeys = Object.keys(basket).length
-          if(numkeys == 0) {
-            document.querySelector('.container').setAttribute('class', 'container empty')
-            document.querySelector('.container').textContent = 'je winkelwagen is leeg'
-            document.querySelector('#to_checkout').style.display = "none"
-          }else{
-            document.querySelector('#to_checkout').style.display = "block"
-          }
-        }
-      (function() {
-        // your page initialization code here
-        // the DOM will be available here
-        updateBasket()
-        const template = document.querySelector('#productrow');
-        const app = document.getElementById('index')
-
-        const container = document.createElement('div')
-        container.setAttribute('class', 'container')
-
-        app.appendChild(container)
-        
-        const basket = readBasket()
-
-        function showProduct(product, amount) {
-          const clone = template.content.cloneNode(true);
-          clone.querySelector(".product_name").textContent = product.name
-          clone.querySelector(".product_price").textContent += product.price
-          clone.querySelector(".product_code").textContent = product.code
-          clone.querySelector(".product_id").value = product.id
-          clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
-          clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
-          clone.querySelector(".product_amount_show").textContent = amount             
-          container.appendChild(clone)
-        }
-
-        Object.keys(basket).forEach(id => {
-            showProduct(JSON.parse(localStorage.getItem(`item_${id}`)), basket[id])
-        })
-
-        setIfEmptyMsg()
-
-      })();
-    </script>
-    <script>
-      // script to order when submit-button is pressed
-    /*
     updateBasket()
     const template = document.querySelector('#productrow');
     const totalTemplate = document.querySelector('#productsum');
@@ -190,22 +138,20 @@
     const clone = totalTemplate.content.cloneNode(true);
     clone.querySelector(".product_sum").textContent += basketTotalPrice().toFixed(2)
     index.appendChild(clone)
-    */
 
-    // translate all data in the form into a string of parameters that can be added to the url after ?
+
+
     function urlencodeFormData(fd){
       var params = new URLSearchParams();
       console.log(params)
       for(var pair of fd.entries()){
           typeof pair[1]=='string' && params.append(pair[0], pair[1]);
       }
-      console.log(params.toString())
       return params.toString();
     }
 
     var formElement = document.querySelector('#orderForm')
 
-    // this function is executed when submit-button on the form is pressed
     function checkout() {
       if(!formElement.reportValidity()){
         return
@@ -237,5 +183,6 @@
 	  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
 	        	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
 	  </script>
+
   </body>
 </html>

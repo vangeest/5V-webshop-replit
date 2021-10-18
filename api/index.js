@@ -177,20 +177,22 @@ function getProductsByIds(ids, callback) {
 
 
 function checkoutOrder(request, response) {
-
-  var { firstName, lastName, email, phone, articles } = request.body
+ console.log("API ontvangt /api/checkout2/")
+ 
+ var { firstName, lastName, email, phone, productIds, productAmounts } = request.body
+ console.log("data ontvangen via post-request:")
  console.log(request.body)
   
-  // define articles as array of id's of products 
-  articles = articles || []
-  if (!Array.isArray(articles)) {
-    articles = [articles]
+  // define productIds and ProductAmounts as array 
+  // if there are 0 or 1 products this code is needed
+  productIds = productIds || []
+  if (!Array.isArray(productIds)) {
+    productIds = [productIds]
   }
-  // define basket containing amount per article
-  var basket = {}
-  articles.forEach(id => {
-    basket[id] = request.body[`item_${id}`]
-  })
+  productAmounts = productAmounts || []
+  if (!Array.isArray(productAmounts)) {
+    productAmounts = [productAmounts]
+  }
 
   // order id: date + random number
   var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -200,21 +202,38 @@ function checkoutOrder(request, response) {
   // db.all('SELECT * FROM products WHERE id = ANY($1::int[])',
   //   articles, // array of query arguments
   // ABOVE LINES GENERATE rows indefined because sqlite doens't support ANY
-    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id IN (?) ORDER BY id ASC')
-    data = sqlOpdracht.all(articles)
+
+    // create part of query where there is an i for each ?
+    // for security reasons (SQL-injection) it is neccessary to use paramaters in db.prepare
+    let queryParamPlaceholders = ''
+    if (productIds.length > 0) {
+      queryParamPlaceholders = queryParamPlaceholders + '?'
+    }
+    let i = 1;
+    while (i < productIds.length) {
+      queryParamPlaceholders = queryParamPlaceholders + ',?'
+      i = i +1;
+    }
+    const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id IN ('+queryParamPlaceholders+') ORDER BY id ASC')
+    data = sqlOpdracht.all(productIds)
     
     //db.all('SELECT * FROM products WHERE id = 1',
     //[], // array of query arguments
     //(err, rows) => {
       // process rows here    
 
+      /* productIds gebruiken
       var products = {}
       data.forEach(p => products[p.id] = p)
-
+*/
+     /* totaalbedrag maken met productsAmount 
       var total = 0;
       for (let id in basket) {
         total += basket[id] * products[id].price
       }
+      */
+      /* voeg artikelen to aan mail,
+      doe iets met een data en een simpel loopje
       var articleTable = "<table>"
       articleTable += "<tr><th>Code</th><th>Naam</th><th>Aantal</th><th>Prijs</th></tr>"
       Object.values(products).forEach(p => {
@@ -222,12 +241,14 @@ function checkoutOrder(request, response) {
       })
       articleTable += `<tr><td colspan="3">Totaal</td><td>€${total.toFixed(2)}</td><tr>`
       articleTable += "</table>"
-
+*/
       var body = `<html><body>Hi<br><br>Er is een nieuwe order <b>${orderId}</b> ontvangen van <br><br>\n` +
         `Naam: ${firstName || '-'} ${lastName || '-'}<br>\n` +
         `Email: ${email || '-'}<br>\n` +
         `Telefoon: ${phone || '-'}<br>\n` +
-        articleTable +
+        //articleTable +
+        `productIds: ${productIds || '-'}<br>\n` + 
+        `productAmounts: ${productAmounts || '-'}<br>\n` + 
         `groet,<br><br>\n\nShop Mailer\n</body></html>`
 
       sendMail('New Order recieved', body)
