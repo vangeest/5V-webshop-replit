@@ -90,7 +90,8 @@ function basketTotalPrice(_basket) {
   var price = 0;
   for (let key in basket) {
     const product = JSON.parse(localStorage.getItem(`item_${key}`))
-    price += parseInt(basket[key]) * parseFloat(product.price)
+  // next line causes error in safari
+  //  price += parseInt(basket[key]) * parseFloat(product.price)
   }
   return price
 }
