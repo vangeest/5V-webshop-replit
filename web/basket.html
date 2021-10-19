@@ -25,8 +25,8 @@
       </div>
     </nav>
     <main>
-   
-      <form id="orderForm">
+      <div id="toCheckout">
+      
         <div id="index">
       	  <div class="container">
             <h5>Winkelwagen</h5>
@@ -48,7 +48,9 @@
               </ul>
               <!-- add type="hidden" to next two lines to hide info-->
               <input class="product_id" name="productIds" data-json="">
-              <input class="product_amount" name="productAmounts" value="1">
+              <input class="product_amount" name="deltaAmount" value="1">
+              <!-- value needs to be set to product_amount_show -->
+              <input class="product_totalAmount" name="productAmounts" value="9">
               <button class="btn btn-outline-dark shop-button" onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
               <button class="btn btn-outline-dark shop-button" onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
               <button class="btn btn-outline-dark shop-button" onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
@@ -56,10 +58,12 @@
           </div>
           </template>
         </div>
-        <div class="container" id="to_checkout">
+        <div class="container">
           <div>Totaal</div>
           <div>€<span class="sum_products">0.00</span></div>
-      
+        </div>
+       
+        <form id="orderForm">
           <h4>Vul hieronder je adresgegevens in</h4>
           <div class="form-group">
             <label>Voornaam</label>
@@ -91,7 +95,7 @@
           </div>
           <div>
             <label for="phone">Mobiel</label>
-            <input  
+            <input required 
                    class="form-control"
                    type="tel" 
                    name="phone" 
@@ -104,8 +108,8 @@
           <p>...en klik op bestellen<p>
           <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie. Zodra je betaald hebt, stuur ik de spullen op.</p>
           <button type="button" onclick="checkout()">Bestellen</button>
-        </div>
         </form>
+      </div>
     </main>
     <footer>
       <hr>
