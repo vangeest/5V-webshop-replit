@@ -1,3 +1,15 @@
+// Javascript functies voor basker
+// De basket (winkelmandje) wordt bewaard op local storage door de browser 
+// en is toegankelijk voor alle pagina's van de website 
+// 
+// De basket bevat de volgende gegevens
+// De producten die besteld moeten worden
+//   voor elk product is er een object in JSON formaat met de naam
+//   item_x, waarbij x de id van het product is
+//   het object bevat alle informatie (velden zoals id, name etc) van een product
+// Array van hoeveelheid (amount) per product, 
+//   de index van de array is het product_id
+
 function getProductInfo(id) {
   return JSON.parse(localStorage.getItem(`item_${id}`))
 }

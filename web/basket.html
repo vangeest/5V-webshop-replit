@@ -47,14 +47,12 @@
                 <li><span class="propert-name">Aantal:</span><span class="product_amount_show"></span></li>
               </ul>
               <!-- add type="hidden" to next two lines to hide info-->
-              <input class="product_id" name="productIds" data-json="">
-              <input class="product_amount" name="productAmounts" data-json="">
+              <input class="product_id" name="productIds" value="" data-json="">
+              <input class="product_amount" name="productAmounts" value="">
               <button class="btn btn-outline-dark shop-button" onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
               <button class="btn btn-outline-dark shop-button" onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
               <button class="btn btn-outline-dark shop-button" onClick="alert("product verwijderen">🗑</button>
-          <!--
               <button class="btn btn-outline-dark shop-button" onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
-            -->
             </div>
           </div>
           </template>
@@ -116,8 +114,9 @@
     </footer>
 
     <script src="/js/basket.js"></script>
-    <script>
-      // script to show basket when page is loaded
+    <script> // script to show basket when page is loaded
+
+        // toon bericht dat winkelwagen leeg is als winkelwagen leeg is
         function setIfEmptyMsg() {
           const basket = readBasket()
           var numkeys = Object.keys(basket).length
@@ -129,6 +128,9 @@
             document.querySelector('#to_checkout').style.display = "block"
           }
         }
+
+      // deze functie wordt aangeroepen als de webpagina is geladen en
+      // toont de inhoud van de winkelwagen 
       (function() {
         // your page initialization code here
         // the DOM will be available here
@@ -143,55 +145,34 @@
         
         const basket = readBasket()
 
-        function showProduct(product, amount) {
+        // voeg alle producten uit de winkelwagen toe aan webpagina
+        for (id in basket) { // herhaal voor alle producten in de winkelmand
+          let amount = basket[id]
+          let product = JSON.parse(localStorage.getItem(`item_${id}`))
           const clone = template.content.cloneNode(true);
           clone.querySelector(".product_name").textContent = product.name
           clone.querySelector(".product_price").textContent += product.price
           clone.querySelector(".product_image").src =`images/${product.id}.jpg`
           clone.querySelector(".product_amount_show").textContent = amount             
           clone.querySelector(".product_id_show").textContent = product.id             
-          clone.querySelector(".product_id").value = product.id             
+          clone.querySelector(".product_id").value = product.id 
+          clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
           clone.querySelector(".product_amount").value = amount            
           container.appendChild(clone)
         }
 
-        Object.keys(basket).forEach(id => {
-            showProduct(JSON.parse(localStorage.getItem(`item_${id}`)), basket[id])
-        })
+        // voeg totaalprijs toe aan webpagina
+        const clone = totalTemplate.content.cloneNode(true);
+        clone.querySelector(".product_sum").textContent += basketTotalPrice().toFixed(2)
+        index.appendChild(clone)
 
+        // voeg toe aan webpagina dat winkelmand leeg is als winkelmand leeg is
         setIfEmptyMsg()
 
       })();
     </script>
-    <script>
-      // script to order when submit-button is pressed
-    /*
-    updateBasket()
-    const template = document.querySelector('#productrow');
-    const totalTemplate = document.querySelector('#productsum');
-    const index = document.getElementById('index')
-
-    const basket = readBasket()
-
-    function productData(product, amount) {
-      const clone = template.content.cloneNode(true);
-      clone.querySelector(".product_amount_input").name = `item_${product.id}`
-      clone.querySelector(".product_amount_input").value = amount
-      clone.querySelector(".product_id").value += product.id
-      clone.querySelector(".product_code").textContent = product.code
-      clone.querySelector(".product_amount").textContent = amount
-      clone.querySelector(".product_name").textContent = product.name
-      clone.querySelector(".product_price").textContent += product.price
-      index.appendChild(clone)
-    }
-
-    Object.keys(basket).forEach(id => {
-        productData(getProductInfo(id), basket[id])
-    })
-    const clone = totalTemplate.content.cloneNode(true);
-    clone.querySelector(".product_sum").textContent += basketTotalPrice().toFixed(2)
-    index.appendChild(clone)
-    */
+    
+    <script> // script to order when submit-button is pressed
 
     // translate all data in the form into a string of parameters that can be added to the url after ?
     function urlencodeFormData(fd){
