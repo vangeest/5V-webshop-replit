@@ -108,7 +108,21 @@
           <button type="button" onclick="checkout()">Bestellen</button>
         </form>
         </div>
-      
+         <div class="container" id="checkout_status">
+         <template>
+           <div class="alert alert-success" id="checkout_success">
+             Je bestelling is geplaatst en een bevestigingsmail is verzonden.<br>
+             Je ordernummer is <span id="checkout_ordernumber"></span> 
+           </div>
+           <div class="alert alert-danger" id="checkout_failed">
+             Je bestelling kon niet worden geplaatst, neem contact op met de shop<br>
+             Foutmelding:<br>
+             <span id="checkout_error_message"></span>
+           </div>
+         </template>
+         </div>  
+        </div>
+
     </main>
     <footer>
       <hr>
@@ -209,10 +223,19 @@
         if (this.readyState == 4 && this.status == 200) {
           emptyBasket()
           var data = JSON.parse(this.responseText)
-          window.location.href = `thankyou.html?orderId=${data.orderId}`
+          const statusContainer = document.getElementById('checkout_status')
+          const statusBlock = document.querySelector('#checkout_success')
+          const checkout_ordernumber = document.querySelector('#checkout_ordernumber')
+          //checkout_ordernumber.textContent = data.orderId
+          //next line causes ERROR: TypeError: Argument 1 ('node') to Node.appendChild must be an instance of Node
+          statusContainer.appendChild(statusBlock)
         } else if (this.readyState == 4) {
-          document.getElementById('resp').textContent += this.responseText
-        } else {
+          const statusContainer = document.getElementById('checkout_status')
+          const statusBlock = document.querySelector('#checkout_failed')
+          const checkout_error_message = document.querySelector('#checkout_error_message')
+          //checkout_error_message.textContent = this.responseText
+          statusContainer.appendChild(statusBlock)
+          } else {
             //not ready yet
         }
       }
