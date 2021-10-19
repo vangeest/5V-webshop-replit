@@ -47,11 +47,10 @@
                 <li><span class="propert-name">Aantal:</span><span class="product_amount_show"></span></li>
               </ul>
               <!-- add type="hidden" to next two lines to hide info-->
-              <input class="product_id" name="productIds" value="" data-json="">
-              <input class="product_amount" name="productAmounts" value="">
+              <input class="product_id" name="productIds" data-json="">
+              <input class="product_amount" name="productAmounts" value="1">
               <button class="btn btn-outline-dark shop-button" onClick="addAmountClosestToBasket(this, '.product_amount_show')">+</button>
               <button class="btn btn-outline-dark shop-button" onClick="removeAmountClosestFromBasket(this, '.product_amount_show')">-</button>
-              <button class="btn btn-outline-dark shop-button" onClick="alert("product verwijderen">🗑</button>
               <button class="btn btn-outline-dark shop-button" onClick="if(confirm('verwijder product?')) { removeClosestCompletelyFromBasket(this); setIfEmptyMsg() }">🗑</button>
             </div>
           </div>
@@ -147,9 +146,10 @@
 
         // voeg alle producten uit de winkelwagen toe aan webpagina
         for (id in basket) { // herhaal voor alle producten in de winkelmand
-          let amount = basket[id]
-          let product = JSON.parse(localStorage.getItem(`item_${id}`))
-          const clone = template.content.cloneNode(true);
+          var amount = basket[id]
+          var product = JSON.parse(localStorage.getItem(`item_${id}`))
+          const clone = template.content.cloneNode(true)
+          debugger
           clone.querySelector(".product_name").textContent = product.name
           clone.querySelector(".product_price").textContent += product.price
           clone.querySelector(".product_image").src =`images/${product.id}.jpg`
@@ -157,15 +157,14 @@
           clone.querySelector(".product_id_show").textContent = product.id             
           clone.querySelector(".product_id").value = product.id 
           clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
-          clone.querySelector(".product_amount").value = amount            
+          //clone.querySelector(".product_amount").value = amount            
           container.appendChild(clone)
         }
 
-        // voeg totaalprijs toe aan webpagina
-        const clone = totalTemplate.content.cloneNode(true);
-        clone.querySelector(".product_sum").textContent += basketTotalPrice().toFixed(2)
-        index.appendChild(clone)
-
+        // vul totaalprijs in in webpagina
+        const total = document.querySelector('.sum_products');
+        total.textContent += basketTotalPrice().toFixed(2)
+        
         // voeg toe aan webpagina dat winkelmand leeg is als winkelmand leeg is
         setIfEmptyMsg()
 
