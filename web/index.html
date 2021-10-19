@@ -72,6 +72,8 @@
 	<script src="/js/basket.js"></script>
 	<script>
    
+    // deze functie zet de producten op het scherm
+    // nadat de API is aangeroepen
     function showProducts() {
       console.log("showProducts called")
       const template = document.querySelector('#productcard');
@@ -82,14 +84,16 @@
 
       app.appendChild(container)
         
-            var data = JSON.parse(this.response)
-            for (let row in data) {
+            var data = JSON.parse(this.response) // vertaal response van API naar array met producten
+            for (let row in data) { // herhaal voor elke product
               const product = data[row]
-              const clone = template.content.cloneNode(true);
               var name = product.name.substr(0, 35)
               if(name.length < product.name.length) {
                 name = name + '...'
               }
+              // voeg product toe aan DOM, 
+              // zodat deze zichtbaar wordt op de webpagina
+              const clone = template.content.cloneNode(true);
               clone.querySelector(".product_title").textContent = name
               clone.querySelector(".product_description").textContent =`${product.description.substr(0, 100)}...`
               clone.querySelector(".product_price").textContent += product.price
@@ -97,7 +101,6 @@
               clone.querySelector(".product_id").value = product.id
               clone.querySelector(".product_id").dataset.json = JSON.stringify(product)
               clone.querySelector(".product_image").src =`/images/${product.id}.jpg`
-
               container.appendChild(clone)
             }
           }
@@ -110,7 +113,7 @@
         updateBasket()
 
         // laad producten
-        // de functie showProducs wordt aangeroepen als er antwoord van de API is
+        // de functie showProducts wordt aangeroepen als er antwoord van de API is
         var request = new XMLHttpRequest()
         request.open('GET', '/api/products', true) 
         request.onload = showProducts 
