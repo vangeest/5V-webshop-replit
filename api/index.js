@@ -189,13 +189,12 @@ function checkoutOrder(request, response) {
   var totaalBedrag = 0;
   var articleTable = "<table>"
   articleTable += "<tr><th>Id</th><th>Code</th><th>Naam</th><th>Prijs per stuk</th><th>Aantal</th><th>Aantal * prijs</th></tr>"
-  // TODO: check of dit werkt voor 0 producten
-  for (let i = 0; i < productIds.length; i++) {
+  for (let i in productIds) { // herhaal voor elke index van productIds[]
     let id = productIds[i]
     const sqlOpdracht = db.prepare('SELECT * FROM products WHERE id = ?')
     row = sqlOpdracht.get(id)
     let aantalMaalPrijs = productAmounts[i] * row.price
-    articleTable += `<tr><td>${row.id}<tr><td>${row.code}</td><td>${row.name}</td><td>€ ${row.price.toFixed(2)}</td><td>${productAmounts[i].toFixed(2)}</td><td>€ ${aantalMaalPrijs}</td></tr>`
+    articleTable += `<tr><td>${row.id}<tr><td>${row.code}</td><td>${row.name}</td><td>€ ${row.price.toFixed(2)}</td><td>${productAmounts[i]}</td><td>€ ${aantalMaalPrijs}</td></tr>`
     totaalBedrag += aantalMaalPrijs
   }
   articleTable += `<tr><td colspan="5">Totaal</td><td>€ ${totaalBedrag.toFixed(2)}</td><tr>`

@@ -25,8 +25,6 @@
       </div>
     </nav>
     <main>
-      <div id="toCheckout">
-      
         <div id="index">
       	  <div class="container">
             <h5>Winkelwagen</h5>
@@ -58,11 +56,11 @@
           </div>
           </template>
         </div>
-        <div class="container">
+        <div class="container" id="to_checkout">
           <div>Totaal</div>
           <div>€<span class="sum_products">0.00</span></div>
         </div>
-       
+        <div class="container">
         <form id="orderForm">
           <h4>Vul hieronder je adresgegevens in</h4>
           <div class="form-group">
@@ -109,7 +107,8 @@
           <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie. Zodra je betaald hebt, stuur ik de spullen op.</p>
           <button type="button" onclick="checkout()">Bestellen</button>
         </form>
-      </div>
+        </div>
+      
     </main>
     <footer>
       <hr>
@@ -186,14 +185,19 @@
           typeof pair[1]=='string' && params.append(pair[0], pair[1]);
       }
       // add product_id and and product_amount to params
-      // [to be added and fixed]
+      const basket = readBasket()
       var productIds=[]
-      var nodeList = document.querySelectorAll('.product_id')
-      for (var node in nodeList) {
-        productIds.push(node.dataset.json.id)
-      }  
-      console.log('productIds=', productIds)
-      params.append('productIds', productIds)
+      var productAmounts=[]
+      for (id in basket) { // herhaal voor alle producten in de winkelmand
+          var amount = basket[id]
+          var product = JSON.parse(localStorage.getItem(`item_${id}`))
+          //productIds.push(id)
+          //productAmounts.push(amount)
+          params.append('productIds', id)
+          params.append('productAmounts', amount)
+        }
+      //params.append('productIds', productIds)
+      //params.append('productAmounts', productAmounts)
       console.log(params.toString())
       return params.toString();
     }
