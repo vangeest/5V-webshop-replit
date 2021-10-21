@@ -9,6 +9,8 @@
 </head>
 
 <body>
+  <!-- toast is een melding die tijdelijk rechtsboven op het scherm verschijnt -->
+  <!-- meer info op: https://www.w3schools.com/bootstrap4/bootstrap_ref_js_toasts.asp -->
 	<div class="toast" data-delay="2000">
 		<div class="toast-header">
 			<strong class="mr-auto">Product toegevoegd</strong>
@@ -20,6 +22,8 @@
 			Ga naar je <a href="/basket.html">Winkelwagen</a> om af te rekenen
 		</div>
 	</div>
+
+  <!-- menubalk -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand" href="#">Shop</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +40,8 @@
 				href="basket.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Winkelwagen <span class="num_products"></span></button></a>
 		</div>
 	</nav>
+
+  <!-- lijst met producten, wordt gevuld door javascript -->
 	<main id="index">
 		<div class="container">
 			<h5>Artikelen</h5>
@@ -63,15 +69,36 @@
 		</div>
 	  </template>
 	</main>
+
+  <!-- voettekst -->
 	<footer>
 		<hr>
 		<p>Deze website is gemaakt door <naam leerling> voor het vak informatica op het Emmauscollege Rotterdam. Laatste
 				bijgewerkt 1 oktober 2020.</p>
 	</footer>
 
-	<script src="/js/basket.js"></script>
-	<script>
-   
+	<script src="/js/basket.js"></script> <!-- functies voor de winkelwagen -->
+	
+  <script> // functies om de producten te laden en tonen op de webpagina
+    
+    // deze functie wordt aangeroepen als de pagina geladen is
+    // deze functie laadt de producten via de API
+		(function() { 
+        // your page initialization code here
+        // the DOM will be available here
+       
+        // laad winkelmandje
+        updateBasket()
+
+        // laad producten
+        // de functie showProducts wordt aangeroepen als er antwoord van de API is
+        var request = new XMLHttpRequest()
+        request.open('GET', '/api/products', true) 
+        request.onload = showProducts 
+        request.send() 
+
+      })();
+
     // deze functie zet de producten op het scherm
     // nadat de API is aangeroepen
     function showProducts() {
@@ -104,23 +131,8 @@
               container.appendChild(clone)
             }
           }
-
-		(function() {
-        // your page initialization code here
-        // the DOM will be available here
-       
-        // laad winkelmandje
-        updateBasket()
-
-        // laad producten
-        // de functie showProducts wordt aangeroepen als er antwoord van de API is
-        var request = new XMLHttpRequest()
-        request.open('GET', '/api/products', true) 
-        request.onload = showProducts 
-        request.send() 
-
-      })();
 	</script>
+
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
 		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
 	</script>
