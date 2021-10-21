@@ -1,17 +1,18 @@
+Deze voorbeeld shop kun je uitproberen in Replit: 
 [Run on Repl.it](https://replit.com/github/vangeest/webshop-replit-example)
 
-# TODO
-- [ ] replace sqlite3 by better-sqlite3
-- [ ] check to implement<br>
+# TODO (docent)
+- [ ] implement all api calls needed for a shop
+- [x] replace sqlite3 by better-sqlite3
+- [x] check to implement<br>
 https://medium.com/truepicinc/queryql-easily-add-filtering-sorting-and-pagination-to-your-node-js-rest-api-9222135c93ae<br>
 or look at this for an approach (no code)<br>
 https://www.algolia.com/blog/engineering/implementing-faceted-search-with-dynamic-faceting-with-code/
-- [ ] look at parameter transfer<br>
+- [x] look at parameter transfer<br>
 https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/getAll<br>
 
-- [ ] fix getProductsByIds in index.js (generating error at checkout)
-- [ ] fix email script
-- [ ] implement all api calls needed for a shop
+- [x] fix getProductsByIds in index.js (generating error at checkout)
+- [x] fix email script
 - [x] remove arrow functions, because they make the code difficult for novice programmers. Explanation on arrow functions can be found here: https://zendev.com/2018/10/01/javascript-arrow-functions-how-why-when.html
 - [x] replace npm by yarn => much quicker now
 - [x] speed up time it takes to "run", maybe by checking if packages changes before re-installing and by checking of sql file was changed before rebuilding database => now within 10 seconds thanks to yarn
@@ -46,9 +47,32 @@ This file is executed everytime you click on "Run" in replit. What it does is:
 2. (re) create the databasefile db/my.db
 3. start the server for the api en webpages
 
-# Documentation
+# uitleg van code
+De code is voorzien van commentaar op punten waar de werking misschien niet eenvoudig te volgen is.
+We gaan er vanuit dat je basiskennis hebt over html, css en Javascript. Dit heb je geleerd in de vierde klas. 
+In deze webshop worden een aantal technieken gebruikt die je niet in de vierde hebt gehad. Die lichten we kort toe.
 
-## Code
+## functies al parameters
+Bij de aanroep van een functie kun je variabelen meegeven als parameter. 
+Dit ken je van de vierde klas.
+Je kunt ook functies meegeven als parameter. 
+In Javascript wordt dit veelvuldig gebruikt.
+
+## asynchrone functies
+In de meeste programmeertalen word code van boven naar beneden uitgevoerd. 
+In Javascript wordt soms met de volgende opdracht doorgegaan voordat de vorige klaar is. 
+Als de vorige klaar is dan wordt er een functie aangeroepen die als parameter is meegegeven aan de vorige opdracht. 
+Dit is een krachtige functionaliteit van Javascript maar voor beginnende programmeurs lastig te doorgronden. 
+Dit wordt bijvoorbeeld gebruikt bij het versturen van mail.
+
+## html templates
+Je kunt Javascript gebruiken om extra elementen aan je webpagina toe te voegen nadat deze geladen is. 
+Een veelgebruikte manier daarvoor is het opnemen van een stukje template (html tussen  tussen <template> en </template>) in het html bestand
+Het template wordt niet door de broswer getoond, maar het stuk html in het template kan in Javascript worden gekopieerd (gecloned) en aangepast.
+Dit wordt bijvoorbeeld gebruikt bij het tonen van artikelen in de shop.
+
+# Documentatie over technieken
+
 * tutorial building a REST-api with postgressDB + jsnode + jsexpress\
 https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
 * serving static files with jsexpress\
@@ -65,7 +89,17 @@ google op local storage javascript basket
 heroku specifieke oplossing, zie aldaar\
 generieke uitleg vind je hier: https://youtu.be/Va9UKGs1bwI
 
-## Zet je mail configuratie in replit
+# Documentatie over tools
+* gitpod online editor en hosting ontwikkelomgeving\
+https://www.gitpod.io/docs/
+* introdution to docker (kennis alleen nodig als je de repo heftig wilt aanpassen)\
+https://docker-curriculum.com
+* yarn (kennis alleen nodig als je de repo heftig wilt aanpassen)\
+https://yarnpkg.com/getting-started
+* heroku hosting productieomgeving\
+https://devcenter.heroku.com/
+
+# Howto mail configureren in replit
 De shop mailt elke order die geplaatst is.
 Mailen werkt niet in gitpod, omdat de smtp-port dicht staat.
 Mailen door de shop in replit werkt als volgt.
@@ -86,38 +120,12 @@ Test je emailconfiguratie:<br>
 Doe een bestelling en kijk naar de console in replit. 
 De api meldt op de console als mail succesvol is verzonden en geeft een foutmelding als het niet is gelukt.
 
-## Tools
-* gitpod online editor en hosting ontwikkelomgeving\
-https://www.gitpod.io/docs/
-* introdution to docker (kennis alleen nodig als je de repo heftig wilt aanpassen)\
-https://docker-curriculum.com
-* yarn (kennis alleen nodig als je de repo heftig wilt aanpassen)\
-https://yarnpkg.com/getting-started
-* heroku hosting productieomgeving\
-https://devcenter.heroku.com/
-
-
-# Notes
-
-## Zet je mail configuratie in heroku
-
-Je krijgt een email account en wachtwoord 
-
-```
-heroku config:set GMAIL_EMAIL=<email account>
-heroku config:set GMAIL_PASSWORD=<email wachtwoord>
-heroku config:set ORDER_MAIL_TO=<jouw email waar je orders ontvangt>
-```
-
-Dit maakt environment variables in heroku. In gitpod doe je dit met `export  <naam>=<waarde>`  - mailen vanuit gitpod gaat niet, omdat de poort daarvoor geblocked is. 
-
-
+# Meer HowTo's
 
 ## posting data 
 
 onze backend code kan alleen 'x-www-form-urlencoded' aan, voor 'multipart/form-data' default Form-data format moeten we de 'formidable' lib gebruiken 
 (https://www.npmjs.com/package/formidable)
-
 
 ## Random images maken
 
@@ -130,6 +138,8 @@ do
  wget -O $count.jpg https://picsum.photos/200/300
 done
 ```
+
+
 # credits
 - avs123a\
 for a "Simple inventory list example with crud using : NodeJS, express framework, pug template, sqlite database and bootstrap". See https://github.com/avs123a/NodeJS-simple-example
