@@ -114,8 +114,8 @@
              Je bestelling is geplaatst en een bevestigingsmail is verzonden.<br>
              Je ordernummer is <span class="checkout_ordernumber"></span> 
            </div>
-         </template>
-           <div class="alert alert-danger checkout_failed">
+         </template id="checkout_failes">
+           <div class="alert alert-danger">
              Je bestelling kon niet worden geplaatst, neem contact op met de shop<br>
              Foutmelding:<br>
              <span class="checkout_error_message"></span>
@@ -221,10 +221,9 @@
     // shows on the webpage whether checkout was succesfull or not
     function showCheckoutStatus() {
         if (this.readyState == 4 && this.status == 200) {
-          //emptyBasket()
+          emptyBasket()
+          // toon banner dat bestelling is verzonden
           var data = JSON.parse(this.responseText)
-          console.log("data", data)
-          console.log("document", document)
           var parent = document.getElementById('checkout_status')
           var template = document.querySelector('#checkout_success')
           var clone = template.content.cloneNode(true)
@@ -232,13 +231,15 @@
           checkout_ordernumber.textContent = data.orderId
           parent.appendChild(clone)
         } else if (this.readyState == 4) {
-          const statusContainer = document.getElementById('checkout_status')
-          const statusBlock = document.querySelector('.checkout_failed')
-          const checkout_error_message = document.querySelector('.checkout_error_message')
-          //checkout_error_message.textContent = this.responseText
-          statusContainer.appendChild(clone)
-          } else {
-            //not ready yet
+          // toon banner met foutmelding dat bestelling niet is verzonden
+          var parent = document.getElementById('checkout_status')
+          var template = document.querySelector('#checkout_failed')
+          var clone = template.content.cloneNode(true)
+          var checkout_ordernumber = clone.querySelector('.checkout_error_message')
+          checkout_error_message.textContent = this.responseText
+          parent.appendChild(clone)  
+        } else {
+            // not ready yet
         }
       }
  

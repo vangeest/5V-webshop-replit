@@ -210,9 +210,19 @@ function checkoutOrder(request, response) {
     //`productAmounts: ${productAmounts || '-'}<br>\n` + 
     `groet,<br><br>\n\nShop Mailer\n</body></html>`
 
-  sendMail('Bevestiging van bestelling', body, email)
-  // note: mailer is async, so technically it has not been send yet 
-  response.status(200).send({ orderId })
+
+  // check mailconfig en verstuur mail
+  if (mailConfigOK()) {
+    sendMail('Bevestiging van bestelling', body, email)
+    // note: mailer is async, so technically it has not been send yet 
+    // if an error occurs during sending of the mail, 
+    // the user gets an okee, but the error is dumped in console.log
+    response.status(200).send({ orderId })
+  } else
+    const errorMessage = "Error: environment variables GMAIL_EMAIL, GMAIL_PASSWORD or ORDER_MAIL_TO not configured"
+    console.log(errorMessage)
+    response.status(500).send({ errorMessage });
+  }
 
 }
 
@@ -220,7 +230,7 @@ function checkoutOrder(request, response) {
 // sent mail hulp onderdelen
 // --------------------------
 
-var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer'); // laad module voor versturen van email
 
 function mailConfigOK() {
   return process.env.GMAIL_EMAIL !== undefined &&
@@ -229,6 +239,8 @@ function mailConfigOK() {
 }
 
 function sendMail(subject, body, recipent) {
+
+  // definieer de mail
   const mailOptions = {
     from: process.env.GMAIL_EMAIL,
     to: recipent,
@@ -236,12 +248,8 @@ function sendMail(subject, body, recipent) {
     subject: subject,
     html: body
   };
-
-  if (!mailConfigOK()) {
-    console.log(`mail not configured properly - dumping mail: ${JSON.stringify(mailOptions)}`)
-    return
-  }
-
+  
+  // definieer de inloggegegens voor gmail
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -250,6 +258,21 @@ function sendMail(subject, body, recipent) {
     }
   });
 
+  // controlleer de connnectie met gmail
+  // zie console.log voor errors
+  // veelvoorkomende oorzaken van errors: 
+  // - verkeerd wachtwoord/inlognaam, 
+  // - less secure apps niet toegestaan in google (oplossing: pas setting in je gmail aan), 
+  // - 2fa aangezet in google maar geen apppassword gebruikt (oplossing: maak app specifiek wachtwoord in je gmail)
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
+  });
+
+  // verstuur mail
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
