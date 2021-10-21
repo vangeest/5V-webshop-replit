@@ -14,7 +14,6 @@
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
@@ -24,7 +23,9 @@
         <a href="basket.html"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Winkelwagen <span class="num_products"></span></button></a>
       </div>
     </nav>
+
     <main>
+        <!-- inhoud winkelwagen -->
         <div class="container" id="index">
           <h5>Winkelwagen</h5>
           <p>Hier zie je de lijst met artikelen uit je winkelwagen.</p>
@@ -62,11 +63,14 @@
           </template>
         </div>
 
+         <!-- totaal bedrag winkelwagen en knop voor Winkelwagen legen en knop voor Verder winkelen-->
         <div class="container" id="totaal">
             <p>Totaal bedrag: € <span class="sum_products">0.00</span></p>
             <button class="btn btn-outline-dark shop-button" onClick="if(confirm('Winkelwagen legen?')) { emptyBasket(); location.href='basket.html' }">Winkelwagen legen</button> <!-- beetje lomp om hele pagina opnieuw te laden na legen -->
             <button class="btn btn-outline-dark shop-button" onClick="location.href='index.html'">Verder winkelen</button>
         </div>
+
+        <!-- bestelformulier -->
         <form class="container" id="orderForm">
           <h4>Vul hieronder je adresgegevens in</h4>
           <div class="form-group">
@@ -128,9 +132,10 @@
           </div>
           <p>...en klik op bestellen<p>
           <p>Als ik je bestelling gezien heb, dan ontvang je van mij een Tikkie. Zodra je betaald hebt, stuur ik de spullen op.</p>
-          <button type="button" onclick="checkout()">Bestellen</button>
+          <button type="button" class="btn btn-outline-dark shop-button" onclick="checkout()">Bestellen</button>
         </form>
         
+        <!-- bevestiging van bestelling -->
         <div class="container" id="checkout_status">
              <template id="checkout_success">
                <div class="alert alert-success"> 
