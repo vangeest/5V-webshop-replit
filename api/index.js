@@ -218,7 +218,7 @@ function checkoutOrder(request, response) {
     // if an error occurs during sending of the mail, 
     // the user gets an okee, but the error is dumped in console.log
     response.status(200).send({ orderId })
-  } else
+  } else {
     const errorMessage = "Error: environment variables GMAIL_EMAIL, GMAIL_PASSWORD or ORDER_MAIL_TO not configured"
     console.log(errorMessage)
     response.status(500).send({ errorMessage });
@@ -248,7 +248,7 @@ function sendMail(subject, body, recipent) {
     subject: subject,
     html: body
   };
-  
+
   // definieer de inloggegegens voor gmail
   const transporter = nodemailer.createTransport({
     service: 'gmail',

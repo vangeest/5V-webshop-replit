@@ -164,8 +164,8 @@
 
         // voeg alle producten uit de winkelwagen toe aan webpagina
         for (id in basket) { // herhaal voor alle producten in de winkelmand
-          var amount = basket[id]
-          var product = JSON.parse(localStorage.getItem(`item_${id}`))
+          const amount = basket[id]
+          const product = JSON.parse(localStorage.getItem(`item_${id}`))
           const clone = template.content.cloneNode(true)
           clone.querySelector(".product_name").textContent = product.name
           clone.querySelector(".product_price").textContent += product.price
@@ -195,17 +195,15 @@
     function urlencodeAllData(){  
       var params = new URLSearchParams();
       // add input fields from form to params 
-      var formData = new FormData(formElement)
+      const formData = new FormData(formElement)
       for(var pair of formData.entries()){
           typeof pair[1]=='string' && params.append(pair[0], pair[1]);
       }
       // add product_id and and product_amount to params
       const basket = readBasket()
-      var productIds=[]
-      var productAmounts=[]
       for (id in basket) { // herhaal voor alle producten in de winkelmand
-          var amount = basket[id]
-          var product = JSON.parse(localStorage.getItem(`item_${id}`))
+          const amount = basket[id]
+          const product = JSON.parse(localStorage.getItem(`item_${id}`))
           //productIds.push(id)
           //productAmounts.push(amount)
           params.append('productIds', id)
@@ -223,19 +221,19 @@
         if (this.readyState == 4 && this.status == 200) {
           emptyBasket()
           // toon banner dat bestelling is verzonden
-          var data = JSON.parse(this.responseText)
-          var parent = document.getElementById('checkout_status')
-          var template = document.querySelector('#checkout_success')
+          const data = JSON.parse(this.responseText)
+          const parent = document.getElementById('checkout_status')
+          const template = document.querySelector('#checkout_success')
           var clone = template.content.cloneNode(true)
           var checkout_ordernumber = clone.querySelector('.checkout_ordernumber')
           checkout_ordernumber.textContent = data.orderId
           parent.appendChild(clone)
         } else if (this.readyState == 4) {
           // toon banner met foutmelding dat bestelling niet is verzonden
-          var parent = document.getElementById('checkout_status')
-          var template = document.querySelector('#checkout_failed')
+          const parent = document.getElementById('checkout_status')
+          const template = document.querySelector('#checkout_failed')
           var clone = template.content.cloneNode(true)
-          var checkout_ordernumber = clone.querySelector('.checkout_error_message')
+          var checkout_error_message = clone.querySelector('.checkout_error_message')
           checkout_error_message.textContent = this.responseText
           parent.appendChild(clone)  
         } else {
